@@ -68,12 +68,6 @@ class GoFish
 			cards_to_chose_from = []
 			# populate the choice-pool:
 			@dealer.hand.each do |card|
-				# .gsub(/( of Spades|| of Diamonds|| of Hearts|| of Clubs)/, "")
-					# ...is not being recognized. Trying to be too crafty by putting or's into a gsub?
-				# .gsub(/( of Clubs),( of Diamonds),( of Hearts),( of Spades)/, "")
-					# Does not work either, after a test.
-
-				# Chaining .gsubs seems to work, instead:
 				card.gsub(/( of Clubs)/, "").gsub(/( of Diamonds)/, "").gsub(/( of Hearts)/, "").gsub(/( of Spades)/, "")
 			end
 
@@ -108,8 +102,25 @@ class GoFish
 				can_ask_for = true if card.include?(requested_card)
 			end
 
-			puts "You can ask for that." if can_ask_for == true
-			ask_for
+			if can_ask_for == true
+				@dealer.hand.each do |card|
+					if card.include?(requested_card)
+						puts "The dealer had a #{requested_card}; you add the #{card} to your hand."
+						@player.deal(@dealer.hand.delete(card))
+						got_what_they_asked_for = true
+					end
+				end
+			else
+				puts "You cannot ask for that, as you do not have any."
+				ask_for
+			end
+
+			if got_what_they_asked_for == true
+				puts "You got what you asked for! You get another turn."
+				ask_for
+			else
+				dealers_turn
+			end
 		end
 
 		def ask_for
