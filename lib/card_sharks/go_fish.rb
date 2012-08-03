@@ -38,9 +38,9 @@
 		# Also, the .gsub doesn't quite work:
 			# go_fish.rb:92:in `block in dealers_turn': undefined method `gsub' for Jack of Diamonds:Card (NoMethodError)
 
-require "./Deck"
-require "./Player"
-require "./Dealer"
+require "card_sharks/deck"
+require "card_sharks/player"
+require "card_sharks/dealer"
 
 class GoFish
 	def initialize
