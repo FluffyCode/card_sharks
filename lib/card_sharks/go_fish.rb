@@ -98,8 +98,7 @@ class GoFish
 			end
 
 			if got_what_they_asked_for == true
-				puts "The dealer got what they asked for, and gets another turn."
-				dealers_turn
+				ask_for(2)
 			else
 				puts "The dealer didn't get a #{random_card}, and goes fishing instead."
 				go_fish(random_card, @dealer)
@@ -109,15 +108,19 @@ class GoFish
 
 		def go_fish(card, player)
 			card_to_deal = @deck.remove_top_card
-			puts "A #{card_to_deal} is fished from the pool."
 			player.deal(card_to_deal)
+
+			# Tell the player what they got (but don't tell the player what the dealer got):
+			if player == @player
+				puts "You fished a #{card_to_deal} from the pool."
+			end
 
 			# The player gets another turn if they got what they asked for:
 			if card_to_deal.include?(card)
 				if player == @dealer
-					dealers_turn
+					ask_for(2)
 				else
-					ask_for(0)
+					ask_for(1)
 				end
 			end
 		end
@@ -155,7 +158,11 @@ class GoFish
 		def ask_for(x)
 			if x == 1
 				puts "You got what you asked for! You get another turn."
+			elsif x == 2
+				puts "The dealer got what they asked for, and gets another turn."
+				dealers_turn
 			end
+
 			puts "What rank do you want to ask your opponent for?"
 			requested_card = gets.chomp
 			player_turn(requested_card)
