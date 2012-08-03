@@ -122,7 +122,7 @@ class GoFish
 			end
 		end
 
-		def do_you_have_any(requested_card)
+		def player_turn(requested_card)
 			got_what_they_asked_for = false
 			can_ask_for = false
 
@@ -158,7 +158,7 @@ class GoFish
 			end
 			puts "What rank do you want to ask your opponent for?"
 			requested_card = gets.chomp
-			do_you_have_any(requested_card)
+			player_turn(requested_card)
 		end
 
 		# determine who goes first
