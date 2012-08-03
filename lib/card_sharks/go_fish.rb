@@ -15,26 +15,11 @@
 		# player can only ask for what they have at least 1 of
 		# player gets another turn if they got what they ask for, or on a do_you_have_any or a go_fish
 
+		# dealers_turn:
+			# properly populates cards_to_chose_from
+			# properly randomly selects something to ask for
+
 	# list of thing to do/fix:
-		# While testing the .gsub in dealers_turn:
-			# Player hand: Eight of Diamonds, Ace of Diamonds, Three of Clubs, Nine of Clubs, Five of Spades, Queen of Spades, Ten of Clubs.
-			# Dealer hand: Ace of Clubs, Jack of Diamonds, King of Diamonds, Ace of Spades, Queen of Hearts, Nine of Diamonds, Six of Diamonds.
-			# You get the first turn.
-			# What rank do you want to ask your opponent for?
-			# Ace
-			# The dealer had a Ace; you add the Ace of Clubs to your hand.
-			# What rank do you want to ask your opponent for?
-				# The dealer had two Aces - Clubs and Spades - but the player was not given both, only one.
-				# [Part of the] problem is, the program calls ask_for befoing finishing going through the entire hand
-				# This may also have to do with why the program isn't finding a rank sometimes:
-			# Ace
-			# The dealer does not have any Aces. You go fish, instead.
-			# You fish a Jack of Hearts from the pool.
-				# The program isn't going far enough through the hand to find the rank.
-
-		# Also, the .gsub doesn't quite work:
-			# go_fish.rb:92:in `block in dealers_turn': undefined method `gsub' for Jack of Diamonds:Card (NoMethodError)
-
 		# Would you like to play a game of Go Fish?
 		# yes
 		# Player hand: Two of Clubs, Nine of Clubs, Eight of Spades, Six of Spades, Eight of Clubs, King of Clubs, King of Spades.
@@ -81,6 +66,10 @@ class GoFish
 		puts "Player hand: #{@player.tell_hand}."
 		puts "Dealer hand: #{@dealer.tell_hand}."
 
+		# def pass_cards_around(giver, taker, card)
+			# temp placeholder for passing cards
+		# end
+
 		def dealers_turn
 			# dealer gets a pool of ranks to chose from:
 			cards_to_chose_from = []
@@ -89,14 +78,28 @@ class GoFish
 				# card != String, via is_a?
 				cards_to_chose_from << card.to_s.gsub(/( of Clubs)/, "").gsub(/( of Diamonds)/, "").gsub(/( of Hearts)/, "").gsub(/( of Spades)/, "")
 			end
-
 			# randomly determine which card the dealer will ask for:
 			random_card = cards_to_chose_from[rand(cards_to_chose_from.length)]
 
 			# ask for it:
-			# Remove the following line after testing:
-			puts "The dealer can chose: #{cards_to_chose_from}."
 			puts "The dealer asks for: #{random_card}."
+
+			got_what_they_asked_for = false
+			@player.hand.each do |card|
+				if card.include?(random_card)
+					@dealer.deal(@player.hand.delete(card))
+					puts "You pass the dealer your #{card}."
+					got_what_they_asked_for = true
+				end
+			end
+
+			if got_what_they_asked_for == true
+				puts "The dealer got what they asked for, and gets another turn."
+				dealers_turn
+			else
+				puts "You didn't have what the dealer wanted. Lucky you!"
+				ask_for(0)
+			end
 		end
 
 		def go_fish(card)
