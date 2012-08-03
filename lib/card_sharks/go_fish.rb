@@ -104,34 +104,12 @@ class GoFish
 			got_what_they_asked_for = false
 			can_ask_for = false
 
-			# if they player doesn't have at least one of what they are asking for, they can't ask for it:
 			@player.hand.each do |card|
-				if card.include?(requested_card)
-					can_ask_for = true
-				end
-					
-				if can_ask_for == true
-					@dealer.hand.each do |card|
-						if card.include?(requested_card)
-							@player.deal(@dealer.hand.delete(card))
-							puts "The dealer had a #{requested_card}; you add the #{card} to your hand."
-							puts "Updated dealer hand: #{@dealer.tell_hand}."
-							got_what_they_asked_for = true
-						end
-					end
-				else
-					puts "You cannot ask for a #{requested_card}, as you do not have any."
-					ask_for
-				end
+				can_ask_for = true if card.include?(requested_card)
 			end
 
-			if got_what_they_asked_for == true
-				puts "You got what you asked for! You get to go again."
-				ask_for
-			else
-				puts "The dealer did not have any."
-				go_fish(requested_card)
-			end
+			puts "You can ask for that." if can_ask_for == true
+			ask_for
 		end
 
 		def ask_for
