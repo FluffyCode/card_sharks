@@ -12,11 +12,8 @@
 	# player's score based on how many sets of 4 they have, via RANK (King King King King == a set)
 
 	# list of things working properly:
+		# player can only ask for what they have at least 1 of
 		# player gets another turn if they got what they ask for, or on a do_you_have_any or a go_fish
-
-	# list of things half-working:
-		# they player cannot ask for something they don't have - but the program is not incrementing through hands properly -
-			# either the player's or the dealer's - so it may not find something that they DO have.
 
 	# list of thing to do/fix:
 		# While testing the .gsub in dealers_turn:
@@ -37,6 +34,27 @@
 
 		# Also, the .gsub doesn't quite work:
 			# go_fish.rb:92:in `block in dealers_turn': undefined method `gsub' for Jack of Diamonds:Card (NoMethodError)
+
+		# Would you like to play a game of Go Fish?
+		# yes
+		# Player hand: Two of Clubs, Nine of Clubs, Eight of Spades, Six of Spades, Eight of Clubs, King of Clubs, King of Spades.
+		# Dealer hand: Two of Hearts, Two of Diamonds, Seven of Spades, Four of Clubs, Six of Diamonds, Five of Spades, Four of Spades.
+		# You get the first turn.
+		# What rank do you want to ask your opponent for?
+		# Two
+		# The dealer had a Two; you add the Two of Hearts to your hand.
+		# You got what you asked for! You get another turn.
+		# What rank do you want to ask your opponent for?
+		# Two
+		# The dealer had a Two; you add the Two of Diamonds to your hand.
+		# You got what you asked for! You get another turn.
+		# What rank do you want to ask your opponent for?
+			# Don't know why this is acting up - I just fixed this in a way that it should have read:
+				# Two
+				# The dealer had a Two; you add the Two of Hearts to your hand.
+				# The dealer had a Two; you add the Two of Diamonds to your hand.
+				# You got what you asked for! You get another turn.
+				# What rank do you want to ask your opponent for?
 
 require "card_sharks/deck"
 require "card_sharks/player"
@@ -68,16 +86,17 @@ class GoFish
 			cards_to_chose_from = []
 			# populate the choice-pool:
 			@dealer.hand.each do |card|
-				card.gsub(/( of Clubs)/, "").gsub(/( of Diamonds)/, "").gsub(/( of Hearts)/, "").gsub(/( of Spades)/, "")
+				# card != String, via is_a?
+				cards_to_chose_from << card.to_s.gsub(/( of Clubs)/, "").gsub(/( of Diamonds)/, "").gsub(/( of Hearts)/, "").gsub(/( of Spades)/, "")
 			end
 
 			# randomly determine which card the dealer will ask for:
-			random_card = rand(cards_to_chose_from.length)
+			random_card = cards_to_chose_from[rand(cards_to_chose_from.length)]
 
 			# ask for it:
 			# Remove the following line after testing:
 			puts "The dealer can chose: #{cards_to_chose_from}."
-			puts "The dealer asks for your #{random_card.ranks}s."
+			puts "The dealer asks for: #{random_card}."
 		end
 
 		def go_fish(card)
@@ -87,8 +106,7 @@ class GoFish
 
 			# The player gets another turn if they got what they asked for:
 			if card_to_deal.include?(card)
-				puts "You got what you asked for! You get another turn."
-				ask_for
+				ask_for(1)
 			else
 				dealers_turn
 			end
@@ -112,18 +130,21 @@ class GoFish
 				end
 			else
 				puts "You cannot ask for that, as you do not have any."
-				ask_for
+				ask_for(0)
 			end
 
 			if got_what_they_asked_for == true
-				puts "You got what you asked for! You get another turn."
-				ask_for
+				ask_for(1)
 			else
+				puts "The dealer did not have any: #{requested_card}."
 				dealers_turn
 			end
 		end
 
-		def ask_for
+		def ask_for(x)
+			if x == 1
+				puts "You got what you asked for! You get another turn."
+			end
 			puts "What rank do you want to ask your opponent for?"
 			requested_card = gets.chomp
 			do_you_have_any(requested_card)
@@ -133,9 +154,9 @@ class GoFish
 		def who_goes_first
 			# In the final version, uncomment the following line. Just for testing, player gets the first turn.
 			# if rand(2) == 1
-			if 1 == 1	
+			if 1 == 0
 				puts "You get the first turn."
-				ask_for
+				ask_for(0)
 			else
 				puts "The dealer gets the first turn."
 				dealers_turn
