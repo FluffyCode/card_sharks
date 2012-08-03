@@ -41,6 +41,10 @@
 				# You got what you asked for! You get another turn.
 				# What rank do you want to ask your opponent for?
 
+		# go_fish now incorporated into do_you_have_any and dealers_turn; however:
+			# puts "A #{card_to_deal} is fished from the pool."
+				# Need to do something about that. Tell the player what they got, but don't tell the player what the dealer got.
+
 require "card_sharks/deck"
 require "card_sharks/player"
 require "card_sharks/dealer"
@@ -97,21 +101,24 @@ class GoFish
 				puts "The dealer got what they asked for, and gets another turn."
 				dealers_turn
 			else
-				puts "You didn't have what the dealer wanted. Lucky you!"
+				puts "The dealer didn't get a #{random_card}, and goes fishing instead."
+				go_fish(random_card, @dealer)
 				ask_for(0)
 			end
 		end
 
-		def go_fish(card)
+		def go_fish(card, player)
 			card_to_deal = @deck.remove_top_card
-			puts "You fish a #{card_to_deal} from the pool."
-			@player.deal(card_to_deal)
+			puts "A #{card_to_deal} is fished from the pool."
+			player.deal(card_to_deal)
 
 			# The player gets another turn if they got what they asked for:
 			if card_to_deal.include?(card)
-				ask_for(1)
-			else
-				dealers_turn
+				if player == @dealer
+					dealers_turn
+				else
+					ask_for(0)
+				end
 			end
 		end
 
@@ -140,6 +147,7 @@ class GoFish
 				ask_for(1)
 			else
 				puts "The dealer did not have any: #{requested_card}."
+				go_fish(requested_card, @player)
 				dealers_turn
 			end
 		end
@@ -157,7 +165,7 @@ class GoFish
 		def who_goes_first
 			# In the final version, uncomment the following line. Just for testing, player gets the first turn.
 			# if rand(2) == 1
-			if 1 == 0
+			if 1 == 1
 				puts "You get the first turn."
 				ask_for(0)
 			else
