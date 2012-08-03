@@ -1,9 +1,9 @@
 # blackjack.rb version 3.2
 
-require "./Deck"
-require "./Player"
-require "./Dealer"
-require "./blackjack_value.rb"
+require "card_sharks/deck"
+require "card_sharks/player"
+require "card_sharks/dealer"
+require "card_sharks/blackjack_value.rb"
 
 # Notes on progress / current problems:
 	# Here's an interesting one:

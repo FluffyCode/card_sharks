@@ -1,4 +1,4 @@
-require "./Card"
+require "card_sharks/card"
 
 class Deck
   SIZE = 52
