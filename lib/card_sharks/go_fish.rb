@@ -41,9 +41,23 @@
 				# You got what you asked for! You get another turn.
 				# What rank do you want to ask your opponent for?
 
-		# go_fish now incorporated into do_you_have_any and dealers_turn; however:
-			# puts "A #{card_to_deal} is fished from the pool."
-				# Need to do something about that. Tell the player what they got, but don't tell the player what the dealer got.
+		# Would you like to play a game of Go Fish?
+		# yes
+		# Player hand: Seven of Hearts, Eight of Spades, Nine of Diamonds, Seven of Diamonds, Five of Spades, Eight of Hearts, Ten of Spades, Seven of Spades, Ten of Diamonds, Jack of Clubs, Five of Clubs, Five of Hearts, Jack of Hearts, Ten of Hearts, Nine of Clubs, Nine of Hearts, King of Hearts, Four of Clubs, Jack of Diamonds, Jack of Spades, Seven of Clubs, Two of Diamonds, Four of Hearts, Six of Hearts, King of Diamonds, Two of Clubs, Queen of Clubs, Three of Diamonds, Queen of Spades, Four of Spades, King of Clubs, Six of Spades, Queen of Diamonds, Nine of Spades, Ace of Diamonds, Ten of Clubs, Three of Clubs, Two of Hearts, Ace of Clubs, King of Spades, Five of Diamonds, Three of Spades, Two of Spades, Six of Clubs, Queen of Hearts, Ace of Spades, Ace of Hearts, Eight of Diamonds, Three of Hearts, Six of Diamonds, Eight of Clubs, Four of Diamonds.
+		# Dealer hand: .
+		# You score with a set of: Seven.
+		# You score with a set of: Nine.
+		# You score with a set of: Eight.
+		# You score with a set of: Jack.
+		# You score with a set of: Five.
+		# You score with a set of: King.
+		# You score with a set of: Two.
+		# You score with a set of: Six.
+		# You score with a set of: Three.
+		# You score with a set of: Four.
+		# You score with a set of: Ace.
+			# Test - add the entire deck to the player's hand to test find_matching_set
+			# Did everything but Tens and Queens.
 
 require "card_sharks/deck"
 require "card_sharks/player"
@@ -63,8 +77,8 @@ class GoFish
 		@deck.shuffle!
 
 		# Initial deal; 7 cards go to each player:
-		7.times { @player.deal(@deck.remove_top_card) }
-		7.times { @dealer.deal(@deck.remove_top_card) }
+		52.times { @player.deal(@deck.remove_top_card) }
+		# 7.times { @dealer.deal(@deck.remove_top_card) }
 
 		# Ultimately, these two lines will be removed. Keep for now, while testing
 		puts "Player hand: #{@player.tell_hand}."
@@ -78,14 +92,14 @@ class GoFish
 			card.to_s.gsub(/( of Clubs)/, "").gsub(/( of Diamonds)/, "").gsub(/( of Hearts)/, "").gsub(/( of Spades)/, "")
 		end
 
-		def find_matching_set(player)
-			player.hand.length.times do |card|
+		def find_matching_set(player, turn)
+			player.hand.each do |card|
 				card_to_check_for = tell_card_rank(card)
 				this_set = []
 
 				player.hand.each do |card|
 					if card.include?(card_to_check_for)
-						this_card << card
+						this_set << card
 					end
 				end
 
@@ -100,6 +114,13 @@ class GoFish
 						puts "You score with a set of: #{card_to_check_for}."
 					end
 				end
+			end
+
+			if turn == "player"
+				ask_for(1)
+			elsif turn == "dealer"
+				ask_for(2)
+			else
 			end
 		end
 
@@ -211,8 +232,8 @@ class GoFish
 		end
 
 		# First-time check for any matching sets:
-		find_matching_set(@player)
-		find_matching_set(@dealer)
+		find_matching_set(@player, 0)
+		find_matching_set(@dealer, 0)
 
 		who_goes_first
 	end
