@@ -1,4 +1,4 @@
-# go_fish.rb version 0.1
+# go_fish.rb version 0.2
 
 # initial setup for now; [important] stuff to remember for later:
 	# players take turns asking for cards from one another
@@ -88,13 +88,13 @@ class GoFish
 				end
 				play_a_game
 
-			else
-				if turn == "player"
-					ask_for(1)
-				elsif turn == "dealer"
-					ask_for(2)
-				else
-				end
+			# else
+			# 	if turn == "player"
+			# 		ask_for(1)
+			# 	elsif turn == "dealer"
+			# 		ask_for(2)
+			# 	else
+			# 	end
 			end
 		end
 
@@ -131,8 +131,7 @@ class GoFish
 			cards_to_chose_from = []
 			# populate the choice-pool:
 			@dealer.hand.each do |card|
-				# card != String, via is_a?
-				cards_to_chose_from << card.tell_card_rank(card)
+				cards_to_chose_from << tell_card_rank(card)
 			end
 			# randomly determine which card the dealer will ask for:
 			random_card = cards_to_chose_from[rand(cards_to_chose_from.length)]
