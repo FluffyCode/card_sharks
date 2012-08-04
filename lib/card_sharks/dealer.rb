@@ -24,6 +24,10 @@ class Dealer
     @score_pool
   end
 
+  def add_to_score_pool(card)
+    @score_pool << card
+  end
+
   def wipe_score_pool
     @score_pool = []
   end
