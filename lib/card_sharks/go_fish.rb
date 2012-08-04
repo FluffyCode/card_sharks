@@ -43,6 +43,10 @@
 				# You got what you asked for! You get another turn.
 				# What rank do you want to ask your opponent for?
 
+		# Current stage:
+			# Incorporating find_matching_set into various places - basically, any time either player comes
+			# into posession of a new card - to check to see if they have a full set of 4.
+
 require "card_sharks/deck"
 require "card_sharks/player"
 require "card_sharks/dealer"
@@ -76,7 +80,7 @@ class GoFish
 			card.to_s.gsub(/( of Clubs)/, "").gsub(/( of Diamonds)/, "").gsub(/( of Hearts)/, "").gsub(/( of Spades)/, "")
 		end
 
-		def check_for_game_over(turn)
+		def check_for_game_over
 			player_score = @player.score_pool.length / 4
 			dealer_score = @dealer.score_pool.length / 4
 			if player_score + dealer_score == 13
@@ -98,7 +102,7 @@ class GoFish
 			end
 		end
 
-		def find_matching_set(player, turn)
+		def find_matching_set(player)
 			player.hand.each do |card|
 				card_to_check_for = tell_card_rank(card)
 				this_set = []
@@ -119,11 +123,11 @@ class GoFish
 					else
 						puts "You score with a set of: #{card_to_check_for}."
 					end
-					find_matching_set(player, turn)
+					find_matching_set(player)
 				end
 			end
 
-			check_for_game_over(turn)
+			check_for_game_over
 		end
 
 		def dealers_turn
@@ -144,6 +148,7 @@ class GoFish
 				if card.include?(random_card)
 					@dealer.deal(@player.hand.delete(card))
 					puts "You pass the dealer your #{card}."
+					find_matching_set(@dealer) # find_matching_set here, after getting what they asked for
 					got_what_they_asked_for = true
 				end
 			end
@@ -170,6 +175,7 @@ class GoFish
 					if card.include?(requested_card)
 						puts "The dealer had a #{requested_card}; you add the #{card} to your hand."
 						@player.deal(@dealer.hand.delete(card))
+						find_matching_set(@player) # find_matching_set here, after getting what they asked for
 						got_what_they_asked_for = true
 					end
 				end
@@ -190,6 +196,7 @@ class GoFish
 		def go_fish(card, player)
 			card_to_deal = @deck.remove_top_card
 			player.deal(card_to_deal)
+			find_matching_set(player)
 
 			# Tell the player what they got (but don't tell the player what the dealer got):
 			if player == @player
@@ -233,8 +240,8 @@ class GoFish
 		end
 
 		# First-time check for any matching sets:
-		find_matching_set(@player, 0)
-		find_matching_set(@dealer, 0)
+		find_matching_set(@player)
+		find_matching_set(@dealer)
 
 		who_goes_first
 	end
