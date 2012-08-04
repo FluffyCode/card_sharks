@@ -41,37 +41,21 @@
 				# You got what you asked for! You get another turn.
 				# What rank do you want to ask your opponent for?
 
-		# Would you like to play a game of Go Fish?
-		# yes
-		# Player hand: Seven of Hearts, Eight of Spades, Nine of Diamonds, Seven of Diamonds, Five of Spades, Eight of Hearts, Ten of Spades, Seven of Spades, Ten of Diamonds, Jack of Clubs, Five of Clubs, Five of Hearts, Jack of Hearts, Ten of Hearts, Nine of Clubs, Nine of Hearts, King of Hearts, Four of Clubs, Jack of Diamonds, Jack of Spades, Seven of Clubs, Two of Diamonds, Four of Hearts, Six of Hearts, King of Diamonds, Two of Clubs, Queen of Clubs, Three of Diamonds, Queen of Spades, Four of Spades, King of Clubs, Six of Spades, Queen of Diamonds, Nine of Spades, Ace of Diamonds, Ten of Clubs, Three of Clubs, Two of Hearts, Ace of Clubs, King of Spades, Five of Diamonds, Three of Spades, Two of Spades, Six of Clubs, Queen of Hearts, Ace of Spades, Ace of Hearts, Eight of Diamonds, Three of Hearts, Six of Diamonds, Eight of Clubs, Four of Diamonds.
-		# Dealer hand: .
-		# You score with a set of: Seven.
-		# You score with a set of: Nine.
-		# You score with a set of: Eight.
-		# You score with a set of: Jack.
-		# You score with a set of: Five.
-		# You score with a set of: King.
-		# You score with a set of: Two.
-		# You score with a set of: Six.
-		# You score with a set of: Three.
-		# You score with a set of: Four.
-		# You score with a set of: Ace.
-			# Test - add the entire deck to the player's hand to test find_matching_set
-			# Did everything but Tens and Queens (11/13).
-			# Next test (12/13):
-		# You score with a set of: Queen.
-		# You score with a set of: Eight.
-		# You score with a set of: Four.
-		# You score with a set of: Jack.
-		# You score with a set of: Seven.
-		# You score with a set of: Three.
-		# You score with a set of: Two.
-		# You score with a set of: Nine.
-		# You score with a set of: Five.
-		# You score with a set of: Six.
-		# You score with a set of: Ace.
-		# You score with a set of: Ten.
-			# Ah...it doesn't start itself over if it find's a set.
+		# After adding recursion to find_matching_set:
+			# You score with a set of: King.
+			# You score with a set of: Six.
+			# You score with a set of: Two.
+			# You score with a set of: Three.
+			# You score with a set of: Five.
+			# You score with a set of: Seven.
+			# You score with a set of: Ten.
+			# You score with a set of: Ace.
+			# You score with a set of: Jack.
+			# You score with a set of: Eight.
+			# You score with a set of: Four.
+			# You score with a set of: Queen.
+			# You score with a set of: Nine.
+		# Viola!
 
 require "card_sharks/deck"
 require "card_sharks/player"
@@ -127,6 +111,7 @@ class GoFish
 					else
 						puts "You score with a set of: #{card_to_check_for}."
 					end
+					find_matching_set(player, turn)
 				end
 			end
 
