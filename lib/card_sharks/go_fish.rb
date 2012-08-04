@@ -74,13 +74,40 @@ class GoFish
 			# temp placeholder for passing cards
 		# end
 
+		def find_matching_set(player)
+			# Check to see if a player's hand contains all 4 of a rank
+			player.hand.length.times do
+				card_to_check_for = player.hand[0].tell_card_rank(card)
+				this_set = []
+
+				# Push the card - being tested for - into a temporary holding space, "this_set"
+				player.hand.each do |card|
+					if card.include?(card_to_check_for)
+						this_card << card
+					end
+				end
+
+				# If this_set is populated by all 4 cards of the same rank,
+				# push them all into the player's final score pool
+				if this_set.length == 4
+					this_set.length.times do |card|
+						player.score_pool << card
+					end
+				end
+			end
+		end
+
+		def tell_card_rank(card)
+			card.to_s.gsub(/( of Clubs)/, "").gsub(/( of Diamonds)/, "").gsub(/( of Hearts)/, "").gsub(/( of Spades)/, "")
+		end
+
 		def dealers_turn
 			# dealer gets a pool of ranks to chose from:
 			cards_to_chose_from = []
 			# populate the choice-pool:
 			@dealer.hand.each do |card|
 				# card != String, via is_a?
-				cards_to_chose_from << card.to_s.gsub(/( of Clubs)/, "").gsub(/( of Diamonds)/, "").gsub(/( of Hearts)/, "").gsub(/( of Spades)/, "")
+				cards_to_chose_from << card.tell_card_rank(card)
 			end
 			# randomly determine which card the dealer will ask for:
 			random_card = cards_to_chose_from[rand(cards_to_chose_from.length)]
@@ -103,25 +130,6 @@ class GoFish
 				puts "The dealer didn't get a #{random_card}, and goes fishing instead."
 				go_fish(random_card, @dealer)
 				ask_for(0)
-			end
-		end
-
-		def go_fish(card, player)
-			card_to_deal = @deck.remove_top_card
-			player.deal(card_to_deal)
-
-			# Tell the player what they got (but don't tell the player what the dealer got):
-			if player == @player
-				puts "You fished a #{card_to_deal} from the pool."
-			end
-
-			# The player gets another turn if they got what they asked for:
-			if card_to_deal.include?(card)
-				if player == @dealer
-					ask_for(2)
-				else
-					ask_for(1)
-				end
 			end
 		end
 
@@ -152,6 +160,25 @@ class GoFish
 				puts "The dealer did not have any: #{requested_card}."
 				go_fish(requested_card, @player)
 				dealers_turn
+			end
+		end
+
+		def go_fish(card, player)
+			card_to_deal = @deck.remove_top_card
+			player.deal(card_to_deal)
+
+			# Tell the player what they got (but don't tell the player what the dealer got):
+			if player == @player
+				puts "You fished a #{card_to_deal} from the pool."
+			end
+
+			# The player gets another turn if they got what they asked for:
+			if card_to_deal.include?(card)
+				if player == @dealer
+					ask_for(2)
+				else
+					ask_for(1)
+				end
 			end
 		end
 
