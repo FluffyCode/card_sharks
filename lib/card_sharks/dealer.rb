@@ -1,6 +1,7 @@
 class Dealer
   def initialize
     @hand = []
+    @score_pool = [] # for Go Fish
   end
 
   def deal(card)
@@ -17,5 +18,13 @@ class Dealer
 
   def wipe_hand
     @hand = []
+  end
+
+  def score_pool
+    @score_pool
+  end
+
+  def wipe_score_pool
+    @score_pool = []
   end
 end

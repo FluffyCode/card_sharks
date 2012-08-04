@@ -2,6 +2,7 @@ class Player
   def initialize
     @credits = 150
     @hand = []
+    @score_pool = [] # for Go Fish
   end
 
   def credits
@@ -40,5 +41,13 @@ class Player
 
   def wipe_hand
     @hand = []
+  end
+
+  def score_pool
+    @score_pool
+  end
+
+  def wipe_score_pool
+    @score_pool = []
   end
 end
