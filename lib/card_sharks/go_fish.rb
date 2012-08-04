@@ -19,6 +19,8 @@
 			# properly populates cards_to_chose_from
 			# properly randomly selects something to ask for
 
+		# find_matching_set
+
 	# list of thing to do/fix:
 		# Would you like to play a game of Go Fish?
 		# yes
@@ -41,22 +43,6 @@
 				# You got what you asked for! You get another turn.
 				# What rank do you want to ask your opponent for?
 
-		# After adding recursion to find_matching_set:
-			# You score with a set of: King.
-			# You score with a set of: Six.
-			# You score with a set of: Two.
-			# You score with a set of: Three.
-			# You score with a set of: Five.
-			# You score with a set of: Seven.
-			# You score with a set of: Ten.
-			# You score with a set of: Ace.
-			# You score with a set of: Jack.
-			# You score with a set of: Eight.
-			# You score with a set of: Four.
-			# You score with a set of: Queen.
-			# You score with a set of: Nine.
-		# Viola!
-
 require "card_sharks/deck"
 require "card_sharks/player"
 require "card_sharks/dealer"
@@ -75,8 +61,8 @@ class GoFish
 		@deck.shuffle!
 
 		# Initial deal; 7 cards go to each player:
-		52.times { @player.deal(@deck.remove_top_card) }
-		# 7.times { @dealer.deal(@deck.remove_top_card) }
+		7.times { @player.deal(@deck.remove_top_card) }
+		7.times { @dealer.deal(@deck.remove_top_card) }
 
 		# Ultimately, these two lines will be removed. Keep for now, while testing
 		puts "Player hand: #{@player.tell_hand}."
@@ -88,6 +74,28 @@ class GoFish
 
 		def tell_card_rank(card)
 			card.to_s.gsub(/( of Clubs)/, "").gsub(/( of Diamonds)/, "").gsub(/( of Hearts)/, "").gsub(/( of Spades)/, "")
+		end
+
+		def check_for_game_over(turn)
+			player_score = @player.score_pool.length / 4
+			dealer_score = @dealer.score_pool.length / 4
+			if player_score + dealer_score == 13
+				puts "The game is over; you have #{player_score} sets, and the dealer has #{dealer_score} sets."
+				if player_score > dealer_score
+					puts "You won this round!"
+				else
+					puts "The dealer won this round."
+				end
+				play_a_game
+
+			else
+				if turn == "player"
+					ask_for(1)
+				elsif turn == "dealer"
+					ask_for(2)
+				else
+				end
+			end
 		end
 
 		def find_matching_set(player, turn)
@@ -115,12 +123,7 @@ class GoFish
 				end
 			end
 
-			if turn == "player"
-				ask_for(1)
-			elsif turn == "dealer"
-				ask_for(2)
-			else
-			end
+			check_for_game_over(turn)
 		end
 
 		def dealers_turn
