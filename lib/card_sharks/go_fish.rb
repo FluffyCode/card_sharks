@@ -57,7 +57,21 @@
 		# You score with a set of: Four.
 		# You score with a set of: Ace.
 			# Test - add the entire deck to the player's hand to test find_matching_set
-			# Did everything but Tens and Queens.
+			# Did everything but Tens and Queens (11/13).
+			# Next test (12/13):
+		# You score with a set of: Queen.
+		# You score with a set of: Eight.
+		# You score with a set of: Four.
+		# You score with a set of: Jack.
+		# You score with a set of: Seven.
+		# You score with a set of: Three.
+		# You score with a set of: Two.
+		# You score with a set of: Nine.
+		# You score with a set of: Five.
+		# You score with a set of: Six.
+		# You score with a set of: Ace.
+		# You score with a set of: Ten.
+			# Ah...it doesn't start itself over if it find's a set.
 
 require "card_sharks/deck"
 require "card_sharks/player"
