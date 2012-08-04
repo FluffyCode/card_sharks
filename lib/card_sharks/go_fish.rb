@@ -62,7 +62,7 @@ class GoFish
 		@deck = Deck.new
 		@deck.shuffle!
 
-		# Initial deal; 7 cards go to each player.
+		# Initial deal; 7 cards go to each player:
 		7.times { @player.deal(@deck.remove_top_card) }
 		7.times { @dealer.deal(@deck.remove_top_card) }
 
@@ -74,9 +74,13 @@ class GoFish
 			# temp placeholder for passing cards
 		# end
 
+		def tell_card_rank(card)
+			card.to_s.gsub(/( of Clubs)/, "").gsub(/( of Diamonds)/, "").gsub(/( of Hearts)/, "").gsub(/( of Spades)/, "")
+		end
+
 		def find_matching_set(player)
-			player.hand.length.times do
-				card_to_check_for = player.hand[0].tell_card_rank(card)
+			player.hand.length.times do |card|
+				card_to_check_for = tell_card_rank(card)
 				this_set = []
 
 				player.hand.each do |card|
@@ -90,19 +94,13 @@ class GoFish
 						player.add_to_score_pool(player.hand.delete(card)) if card.include?(card_to_check_for)
 					end
 
-					# Previous code below - this would not have deleted the card from the player's hand,
-					# possibly resulting in scoring x number of times (x being as often as find_matching_set is called for
-					# - that being a damn lot, considering it will be called any time a player obtains a card).
-					
-					# this_set.length.times do |card|
-					# 	player.score_pool << card
-					# end
+					if player == @dealer
+						puts "The dealer scores with a set of: #{card_to_check_for}."
+					else
+						puts "You score with a set of: #{card_to_check_for}."
+					end
 				end
 			end
-		end
-
-		def tell_card_rank(card)
-			card.to_s.gsub(/( of Clubs)/, "").gsub(/( of Diamonds)/, "").gsub(/( of Hearts)/, "").gsub(/( of Spades)/, "")
 		end
 
 		def dealers_turn
@@ -211,6 +209,10 @@ class GoFish
 				dealers_turn
 			end
 		end
+
+		# First-time check for any matching sets:
+		find_matching_set(@player)
+		find_matching_set(@dealer)
 
 		who_goes_first
 	end
