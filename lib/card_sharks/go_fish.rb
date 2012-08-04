@@ -75,24 +75,28 @@ class GoFish
 		# end
 
 		def find_matching_set(player)
-			# Check to see if a player's hand contains all 4 of a rank
 			player.hand.length.times do
 				card_to_check_for = player.hand[0].tell_card_rank(card)
 				this_set = []
 
-				# Push the card - being tested for - into a temporary holding space, "this_set"
 				player.hand.each do |card|
 					if card.include?(card_to_check_for)
 						this_card << card
 					end
 				end
 
-				# If this_set is populated by all 4 cards of the same rank,
-				# push them all into the player's final score pool
 				if this_set.length == 4
-					this_set.length.times do |card|
-						player.score_pool << card
+					player.hand.each do |card|
+						player.add_to_score_pool(player.hand.delete(card)) if card.include?(card_to_check_for)
 					end
+
+					# Previous code below - this would not have deleted the card from the player's hand,
+					# possibly resulting in scoring x number of times (x being as often as find_matching_set is called for
+					# - that being a damn lot, considering it will be called any time a player obtains a card).
+					
+					# this_set.length.times do |card|
+					# 	player.score_pool << card
+					# end
 				end
 			end
 		end
