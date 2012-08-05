@@ -72,6 +72,20 @@
 		# Dealer hand: Three of Diamonds, Two of Diamonds, Three of Spades, Four of Spades, Two of Clubs, Two of Spades, Four of Clubs, Nine of Diamonds.
 		# What rank do you want to ask your opponent for? (Type 'hand' to see your hand.)
 			# ^ Here's a problem - all the fours were not removed from the dealer's hand during scoring
+			# And again below:
+		# Player hand: Three of Clubs, Nine of Clubs, Four of Diamonds, Two of Hearts, Eight of Clubs, Queen of Hearts, Queen of Spades, Queen of Clubs, Eight of Diamonds, Nine of Spades, Two of Diamonds, Four of Spades, Three of Hearts, King of Spades, King of Clubs, Five of Hearts.
+		# Dealer hand: Six of Hearts, Five of Diamonds, Ace of Spades, Ace of Diamonds, Jack of Spades, Eight of Spades, Jack of Diamonds, Eight of Hearts, Ace of Clubs.
+		# What rank do you want to ask your opponent for? (Type 'hand' to see your hand.)
+		# Eight
+		# The dealer had a Eight; you add the Eight of Spades to your hand.
+		# The dealer had a Eight; you add the Eight of Hearts to your hand.
+		# You score with a set of: Eight.
+		# You got what you asked for! You get another turn.
+		# What rank do you want to ask your opponent for? (Type 'hand' to see your hand.)
+		# hand
+		# Player hand: Three of Clubs, Nine of Clubs, Four of Diamonds, Two of Hearts, Queen of Hearts, Queen of Spades, Queen of Clubs, Nine of Spades, Two of Diamonds, Four of Spades, Three of Hearts, King of Spades, King of Clubs, Five of Hearts, Eight of Hearts.
+		# Dealer hand: Six of Hearts, Five of Diamonds, Ace of Spades, Ace of Diamonds, Jack of Spades, Jack of Diamonds, Ace of Clubs.
+		# What rank do you want to ask your opponent for? (Type 'hand' to see your hand.)
 
 require "card_sharks/deck"
 require "card_sharks/player"
@@ -222,12 +236,13 @@ class GoFish
 		def go_fish(card, player)
 			card_to_deal = @deck.remove_top_card
 			player.deal(card_to_deal)
-			find_matching_set(player)
 
 			# Tell the player what they got (but don't tell the player what the dealer got):
 			if player == @player
 				puts "You fished a #{card_to_deal} from the pool."
 			end
+
+			find_matching_set(player) # find_matching_set here, after being dealt a card from the "pool"
 
 			# The player gets another turn if they got what they asked for:
 			if card_to_deal.include?(card)
