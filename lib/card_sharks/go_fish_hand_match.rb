@@ -31,4 +31,10 @@ class GoFishHandMatch
 		return counter
 	end
 
+	def transfer_card(this_rank, giver, taker)
+		giver.each do |card|
+			taker << giver.delete(card) if card.include?(this_rank)
+		end
+	end
+
 end

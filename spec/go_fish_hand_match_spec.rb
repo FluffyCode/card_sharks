@@ -107,4 +107,44 @@ describe GoFishHandMatch do
 		result.should == 13
 	end
 
+	it "finds all (1/4) cards of a rank in one player's hand, and gives them to the other player" do
+		player1 = []
+		player1 << Card.new("Clubs", "Seven")
+		player1 << Card.new("Hearts", "Four")
+
+		player2 = []
+
+		GoFishHandMatch.new(hand).transfer_card("Seven", player1, player2)
+
+		player2.should == [Card.new("Clubs", "Seven")]
+	end
+
+	it "finds all (2/4) cards of a rank in one player's hand, and gives them to the other player" do
+		player1 = []
+		player1 << Card.new("Clubs", "Seven")
+		player1 << Card.new("Hearts", "Four")
+		player1 << Card.new("Spades", "Seven")
+
+		player2 = []
+
+		GoFishHandMatch.new(hand).transfer_card("Seven", player1, player2)
+
+		player2.should == [Card.new("Clubs", "Seven"), Card.new("Spades", "Seven")]				
+	end
+
+	it "finds all (3/4) cards of a rank in one player's hand, and gives them to the other player" do
+		player1 = []
+		player1 << Card.new("Clubs", "Seven")
+		player1 << Card.new("Hearts", "Four")
+		player1 << Card.new("Spades", "Seven")
+		player1 << Card.new("Diamonds", "Seven")
+
+		player2 = []
+
+		GoFishHandMatch.new(hand).transfer_card("Seven", player1, player2)
+
+		player2.should == [Card.new("Clubs", "Seven"), Card.new("Spades", "Seven"), Card.new("Diamonds", "Seven")]
+	end
+	# Y U NO WORK!?
+
 end
