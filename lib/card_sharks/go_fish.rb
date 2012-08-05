@@ -83,6 +83,7 @@
 require "card_sharks/deck"
 require "card_sharks/player"
 require "card_sharks/dealer"
+require "card_sharks/go_fish_hand_match.rb"
 
 class GoFish
 	def initialize
