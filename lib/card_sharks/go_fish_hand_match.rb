@@ -33,7 +33,11 @@ class GoFishHandMatch
 
 	def transfer_card(this_rank, giver, taker)
 		giver.each do |card|
-			taker << giver.delete(card) if card.include?(this_rank)
+			if card.include?(this_rank)
+				taker << giver.delete(card)
+				# Recursion, here - start over if a transfer was made
+				transfer_card(this_rank, giver, taker)
+			end
 		end
 	end
 

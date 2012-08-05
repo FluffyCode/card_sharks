@@ -145,6 +145,5 @@ describe GoFishHandMatch do
 
 		player2.should == [Card.new("Clubs", "Seven"), Card.new("Spades", "Seven"), Card.new("Diamonds", "Seven")]
 	end
-	# Y U NO WORK!?
 
 end
