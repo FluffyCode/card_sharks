@@ -7,16 +7,28 @@ class GoFishHandMatch
 		card.to_s.gsub(/( of Clubs)/, "").gsub(/( of Diamonds)/, "").gsub(/( of Hearts)/, "").gsub(/( of Spades)/, "")
 	end
 
-	def find_this_card(find_me)
+	def find_this_card(this_rank)
 		presence_of_card = false
 
 		@hand.each do |card|
-			if card.include?(find_me)
+			if card.include?(this_rank)
 				presence_of_card = true
 			end
 		end
 
 		return presence_of_card
+	end
+
+	def count_these(this_rank)
+		counter = 0
+
+		@hand.each do |card|
+			if card.include?(this_rank)
+				counter += 1
+			end
+		end
+
+		return counter
 	end
 
 end

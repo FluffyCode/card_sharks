@@ -47,4 +47,64 @@ describe GoFishHandMatch do
 		result.should == true
 	end
 
+	it "finds all (2/4) of the named cards within a hand" do
+		hand << Card.new("Hearts", "Seven")
+		hand << Card.new("Spades", "Three")
+		hand << Card.new("Spades", "Seven")
+
+		result = GoFishHandMatch.new(hand).count_these("Seven")
+		result.should == 2
+	end
+
+	it "finds all (3/4) of the named cards within a hand" do
+		hand << Card.new("Hearts", "Seven")
+		hand << Card.new("Spades", "Three")
+		hand << Card.new("Spades", "Seven")
+		hand << Card.new("Spades", "Ace")
+		hand << Card.new("Clubs", "Four")
+		hand << Card.new("Diamonds", "Eight")
+		hand << Card.new("Diamonds", "Seven")
+		hand << Card.new("Hearts", "Waffle")
+		# What? It's lunch time, and I'm hungry...
+
+		result = GoFishHandMatch.new(hand).count_these("Seven")
+		result.should == 3
+	end
+
+	it "finds all (4/4) of the named cards within a hand" do
+		some_deck = Deck.new
+		some_deck.shuffle!
+		52.times do
+			hand << some_deck.remove_top_card
+		end
+
+		result = GoFishHandMatch.new(hand).count_these("Seven")
+		result.should == 4
+	end
+
+	it "finds all 13 sets of 4 in a deck" do
+		some_deck = Deck.new
+		some_deck.shuffle!
+		52.times do
+			hand << some_deck.remove_top_card
+		end
+
+		res1 = GoFishHandMatch.new(hand).count_these("Ace")
+		res2 = GoFishHandMatch.new(hand).count_these("Two")
+		res3 = GoFishHandMatch.new(hand).count_these("Three")
+		res4 = GoFishHandMatch.new(hand).count_these("Four")
+		res5 = GoFishHandMatch.new(hand).count_these("Five")
+		res6 = GoFishHandMatch.new(hand).count_these("Six")
+		res7 = GoFishHandMatch.new(hand).count_these("Seven")
+		res8 = GoFishHandMatch.new(hand).count_these("Eight")
+		res9 = GoFishHandMatch.new(hand).count_these("Nine")
+		res10 = GoFishHandMatch.new(hand).count_these("Ten")
+		res11 = GoFishHandMatch.new(hand).count_these("Jack")
+		res12 = GoFishHandMatch.new(hand).count_these("Queen")
+		res13 = GoFishHandMatch.new(hand).count_these("King")
+
+		result = (res1 + res2 + res3 + res4 + res5 + res6 + res7 + res8 + res9 + res10 + res11 + res12 + res13) / 4
+		result.should == 13
+	end
+
 end
