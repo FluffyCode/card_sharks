@@ -164,4 +164,12 @@ describe GoFishHandMatch do
 		player2.should == [Card.new("Clubs", "Seven"), Card.new("Spades", "Seven"), Card.new("Diamonds", "Seven"), Card.new("Hearts", "Seven")]
 	end
 
+	it "will not consider 1/4 ranks to be a full set" do
+		hand << Card.new("Clubs", "Seven")
+
+		result = GoFishHandMatch.new(hand).find_set_of_four("Seven")
+
+		result.should == false
+	end	
+
 end

@@ -41,4 +41,12 @@ class GoFishHandMatch
 		end
 	end
 
+	def find_set_of_four(this_rank)
+		if count_these(this_rank) == 4
+			true
+		else
+			false
+		end
+	end
+
 end
