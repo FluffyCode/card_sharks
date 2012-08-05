@@ -110,8 +110,8 @@ class GoFish
 			# temp placeholder for passing cards
 		# end
 
-		def tell_card_rank(card)
-			card.to_s.gsub(/( of Clubs)/, "").gsub(/( of Diamonds)/, "").gsub(/( of Hearts)/, "").gsub(/( of Spades)/, "")
+		def tell_card_rank(card, hand)
+			GoFishHandMatch.new(hand).strip_suit(card)
 		end
 
 		def check_for_game_over
@@ -130,7 +130,7 @@ class GoFish
 
 		def find_matching_set(player)
 			player.hand.each do |card_a|
-				card_to_check_for = tell_card_rank(card_a)
+				card_to_check_for = tell_card_rank(card_a, player.hand)
 				this_set = []
 
 				player.hand.each do |card_b|
@@ -161,7 +161,7 @@ class GoFish
 			cards_to_chose_from = []
 			# populate the choice-pool:
 			@dealer.hand.each do |card|
-				cards_to_chose_from << tell_card_rank(card)
+				cards_to_chose_from << tell_card_rank(card, @dealer.hand)
 			end
 			# randomly determine which card the dealer will ask for:
 			random_card = cards_to_chose_from[rand(cards_to_chose_from.length)]
