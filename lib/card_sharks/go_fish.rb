@@ -153,7 +153,7 @@ class GoFish
 				end
 			end
 
-			check_for_game_over
+			check_for_game_over 
 		end
 
 		def dealers_turn
