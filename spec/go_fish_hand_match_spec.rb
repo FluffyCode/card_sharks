@@ -172,4 +172,34 @@ describe GoFishHandMatch do
 		result.should == false
 	end	
 
+	it "will not consider 2/4 ranks to be a full set" do
+		hand << Card.new("Clubs", "Seven")
+		hand << Card.new("Diamonds", "Seven")
+
+		result = GoFishHandMatch.new(hand).find_set_of_four("Seven")
+
+		result.should == false
+	end
+
+	it "will not consider 3/4 ranks to be a full set" do
+		hand << Card.new("Clubs", "Seven")
+		hand << Card.new("Diamonds", "Seven")
+		hand << Card.new("Hearts", "Seven")
+
+		result = GoFishHandMatch.new(hand).find_set_of_four("Seven")
+
+		result.should == false
+	end
+
+	it "will consider 4/4 ranks to be a full set" do
+		hand << Card.new("Clubs", "Seven")
+		hand << Card.new("Diamonds", "Seven")
+		hand << Card.new("Hearts", "Seven")
+		hand << Card.new("Spades", "Seven")
+
+		result = GoFishHandMatch.new(hand).find_set_of_four("Seven")
+
+		result.should == true
+	end
+
 end
