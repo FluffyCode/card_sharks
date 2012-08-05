@@ -47,6 +47,32 @@
 			# Incorporating find_matching_set into various places - basically, any time either player comes
 			# into posession of a new card - to check to see if they have a full set of 4.
 
+		# What rank do you want to ask your opponent for? (Type 'hand' to see your hand.)
+		# Five
+		# The dealer did not have any: Five.
+		# You score with a set of: Five.
+		# You fished a Five of Clubs from the pool.
+		# You got what you asked for! You get another turn.
+			# ^ Works as appropriate, but a little wonky. Reorder lines so that the player fishes the card -
+			# adds it to their hand - and THEN go to find_matching_set
+
+		# What rank do you want to ask your opponent for? (Type 'hand' to see your hand.)
+		# Five
+		# The dealer did not have any: Five.
+		# You fished a Four of Clubs from the pool.
+		# The dealer asks for: Four.
+		# You pass the dealer your Four of Clubs.
+		# The dealer scores with a set of: Four.
+		# The dealer got what they asked for, and gets another turn.
+		# The dealer asks for: Four.
+		# The dealer didn't get a Four, and goes fishing instead.
+		# What rank do you want to ask your opponent for? (Type 'hand' to see your hand.)
+		# hand
+		# Player hand: Ten of Clubs, Seven of Clubs, Jack of Clubs, Six of Spades, Seven of Hearts, King of Diamonds, Jack of Hearts, Ten of Diamonds, King of Spades, Seven of Diamonds, Eight of Diamonds, Ace of Clubs, Ace of Diamonds, Ace of Hearts, Ten of Hearts, Nine of Hearts, Six of Diamonds, Queen of Spades, King of Hearts, Five of Clubs, Queen of Clubs.
+		# Dealer hand: Three of Diamonds, Two of Diamonds, Three of Spades, Four of Spades, Two of Clubs, Two of Spades, Four of Clubs, Nine of Diamonds.
+		# What rank do you want to ask your opponent for? (Type 'hand' to see your hand.)
+			# ^ Here's a problem - all the fours were not removed from the dealer's hand during scoring
+
 require "card_sharks/deck"
 require "card_sharks/player"
 require "card_sharks/dealer"
@@ -221,9 +247,18 @@ class GoFish
 				dealers_turn
 			end
 
-			puts "What rank do you want to ask your opponent for?"
+			puts "What rank do you want to ask your opponent for? (Type 'hand' to see your hand.)"
 			requested_card = gets.chomp
-			player_turn(requested_card)
+			if requested_card == "hand"
+				puts
+				puts "Player hand: #{@player.tell_hand}."
+				# Remove the dealer after testing:
+				puts "Dealer hand: #{@dealer.tell_hand}."
+				puts
+				ask_for(0)
+			else
+				player_turn(requested_card)
+			end
 		end
 
 		# determine who goes first
