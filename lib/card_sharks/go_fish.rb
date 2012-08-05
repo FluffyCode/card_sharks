@@ -50,15 +50,6 @@
 		# What rank do you want to ask your opponent for? (Type 'hand' to see your hand.)
 		# Five
 		# The dealer did not have any: Five.
-		# You score with a set of: Five.
-		# You fished a Five of Clubs from the pool.
-		# You got what you asked for! You get another turn.
-			# ^ Works as appropriate, but a little wonky. Reorder lines so that the player fishes the card -
-			# adds it to their hand - and THEN go to find_matching_set
-
-		# What rank do you want to ask your opponent for? (Type 'hand' to see your hand.)
-		# Five
-		# The dealer did not have any: Five.
 		# You fished a Four of Clubs from the pool.
 		# The dealer asks for: Four.
 		# You pass the dealer your Four of Clubs.
@@ -86,6 +77,8 @@
 		# Player hand: Three of Clubs, Nine of Clubs, Four of Diamonds, Two of Hearts, Queen of Hearts, Queen of Spades, Queen of Clubs, Nine of Spades, Two of Diamonds, Four of Spades, Three of Hearts, King of Spades, King of Clubs, Five of Hearts, Eight of Hearts.
 		# Dealer hand: Six of Hearts, Five of Diamonds, Ace of Spades, Ace of Diamonds, Jack of Spades, Jack of Diamonds, Ace of Clubs.
 		# What rank do you want to ask your opponent for? (Type 'hand' to see your hand.)
+
+		# go_fish.rb:134:in `block (2 levels) in find_matching_set': undefined method `include?' for nil:NilClass (NoMethodError)
 
 require "card_sharks/deck"
 require "card_sharks/player"
@@ -131,31 +124,23 @@ class GoFish
 					puts "The dealer won this round."
 				end
 				play_a_game
-
-			# else
-			# 	if turn == "player"
-			# 		ask_for(1)
-			# 	elsif turn == "dealer"
-			# 		ask_for(2)
-			# 	else
-			# 	end
 			end
 		end
 
 		def find_matching_set(player)
-			player.hand.each do |card|
-				card_to_check_for = tell_card_rank(card)
+			player.hand.each do |card_a|
+				card_to_check_for = tell_card_rank(card_a)
 				this_set = []
 
-				player.hand.each do |card|
-					if card.include?(card_to_check_for)
-						this_set << card
+				player.hand.each do |card_b|
+					if card_b.include?(card_to_check_for)
+						this_set << card_b
 					end
 				end
 
 				if this_set.length == 4
-					player.hand.each do |card|
-						player.add_to_score_pool(player.hand.delete(card)) if card.include?(card_to_check_for)
+					player.hand.each do |card_c|
+						player.add_to_score_pool(player.hand.delete(card_c)) if card_c.include?(card_to_check_for)
 					end
 
 					if player == @dealer
@@ -234,22 +219,34 @@ class GoFish
 		end
 
 		def go_fish(card, player)
-			card_to_deal = @deck.remove_top_card
-			player.deal(card_to_deal)
+			if @deck.deck(0) != nil
+				card_to_deal = @deck.remove_top_card
+				player.deal(card_to_deal)
+				
+				# Tell the player what they got (but don't tell the player what the dealer got):
+				if player == @player
+					puts "You fished a #{card_to_deal} from the pool."
+				end
 
-			# Tell the player what they got (but don't tell the player what the dealer got):
-			if player == @player
-				puts "You fished a #{card_to_deal} from the pool."
-			end
+				find_matching_set(player) # find_matching_set here, after being dealt a card from the "pool"
 
-			find_matching_set(player) # find_matching_set here, after being dealt a card from the "pool"
+				# The player gets another turn if they got what they asked for:
+				if card_to_deal.include?(card)
+					if player == @dealer
+						ask_for(2)
+					else
+						ask_for(1)
+					end
+				end
 
-			# The player gets another turn if they got what they asked for:
-			if card_to_deal.include?(card)
+			else
+				# Don't deal a card if there are none left
+				puts "There are no more fish in the pool."
+
 				if player == @dealer
-					ask_for(2)
+					dealers_turn
 				else
-					ask_for(1)
+					ask_for(0)
 				end
 			end
 		end
