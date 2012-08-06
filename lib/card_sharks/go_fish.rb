@@ -77,7 +77,7 @@ class GoFish
 			got_what_they_asked_for = true if hand_length_after_exchange > hand_length_before_exchange
 			GoFishHandMatch.new(@dealer.hand, @player, @dealer).find_set_of_four(random_card, @dealer) # May be incomplete: "random_card"
 
-			if GoFishHandMatch.new(@dealer.hand, @player, @dealer).check_for_game_end(@player, @dealer) == true
+			if GoFishHandMatch.new(@dealer.hand, @player, @dealer).check_for_end_game(@player, @dealer) == true
 				game_end
 			end
 
@@ -106,7 +106,7 @@ class GoFish
 			got_what_they_asked_for = true if hand_length_after_exchange > hand_length_before_exchange
 			GoFishHandMatch.new(@player.hand, @player, @dealer).find_set_of_four(requested_card, @player) # May be incomplete: "requested_card"
 
-			if GoFishHandMatch.new(@player.hand, @player, @dealer).check_for_game_end(@player, @dealer) == true
+			if GoFishHandMatch.new(@player.hand, @player, @dealer).check_for_end_game(@player, @dealer) == true
 				game_end
 			end
 
@@ -129,7 +129,10 @@ class GoFish
 					puts "You fished a #{card_to_deal} from the pool."
 				end
 
-				find_matching_set(player) # find_matching_set here, after being dealt a card from the "pool"
+				# Name the rank of the card just dealt
+				rank_dealt = GoFishHandMatch.new(player.hand, @player, @dealer).strip_suit(card_to_deal)
+				# Find out if it's a full set of 4; if so, it gets put into the player's score pool
+				GoFishHandMatch.new(@player.hand, @player, @dealer).find_set_of_four(rank_dealt, player)
 
 				# The player gets another turn if they got what they asked for:
 				if card_to_deal.include?(card)
