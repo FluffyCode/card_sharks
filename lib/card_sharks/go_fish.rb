@@ -128,55 +128,24 @@ class GoFish
 			end
 		end
 
-		def find_matching_set(player)
-			player.hand.each do |card_a|
-				card_to_check_for = tell_card_rank(card_a, player.hand)
-				this_set = []
-
-				player.hand.each do |card_b|
-					if card_b.include?(card_to_check_for)
-						this_set << card_b
-					end
-				end
-
-				if this_set.length == 4
-					player.hand.each do |card_c|
-						player.add_to_score_pool(player.hand.delete(card_c)) if card_c.include?(card_to_check_for)
-					end
-
-					if player == @dealer
-						puts "The dealer scores with a set of: #{card_to_check_for}."
-					else
-						puts "You score with a set of: #{card_to_check_for}."
-					end
-					find_matching_set(player)
-				end
-			end
-
-			check_for_game_over 
-		end
-
 		def dealers_turn
 			# dealer gets a pool of ranks to chose from:
 			cards_to_chose_from = []
 			# populate the choice-pool:
 			@dealer.hand.each do |card|
-				cards_to_chose_from << tell_card_rank(card, @dealer.hand)
+				cards_to_chose_from << GoFishHandMatch.new(@dealer.hand).strip_suit(card)
 			end
 			# randomly determine which card the dealer will ask for:
 			random_card = cards_to_chose_from[rand(cards_to_chose_from.length)]
-
 			# ask for it:
 			puts "The dealer asks for: #{random_card}."
 
 			got_what_they_asked_for = false
-			@player.hand.each do |card|
-				if card.include?(random_card)
-					@dealer.deal(@player.hand.delete(card))
-					puts "You pass the dealer your #{card}."
-					find_matching_set(@dealer) # find_matching_set here, after getting what they asked for
-					got_what_they_asked_for = true
-				end
+			hand_length_before_exchange = @dealer.hand.length
+				GoFishHandMatch.new(@dealer.hand).transfer_card(random_card, @player, @dealer)
+			hand_length_after_exchange = @dealer.hand.length
+			got_what_they_asked_for = true if hand_length_after_exchange > hand_length_before_exchange
+				GoFishHandMatch.new(@dealer.hand).find_set_of_four(random_card, @dealer) # May be incomplete: "random_card"
 			end
 
 			if got_what_they_asked_for == true
@@ -192,23 +161,17 @@ class GoFish
 			got_what_they_asked_for = false
 			can_ask_for = false
 
-			@player.hand.each do |card|
-				can_ask_for = true if card.include?(requested_card)
-			end
-
-			if can_ask_for == true
-				@dealer.hand.each do |card|
-					if card.include?(requested_card)
-						puts "The dealer had a #{requested_card}; you add the #{card} to your hand."
-						@player.deal(@dealer.hand.delete(card))
-						find_matching_set(@player) # find_matching_set here, after getting what they asked for
-						got_what_they_asked_for = true
-					end
-				end
-			else
+			can_ask_for = true if GoFishHandMatch.new(@player.hand).count_these(requested_card) > 0
+			if can_ask_for == false
 				puts "You cannot ask for that, as you do not have any."
 				ask_for(0)
 			end
+
+			hand_length_before_exchange = @player.hand.length
+				GoFishHandMatch.new(@player.hand).transfer_card(random_card, @dealer, @player)
+			hand_length_after_exchange = @player.hand.length
+			got_what_they_asked_for = true if hand_length_after_exchange > hand_length_before_exchange
+				GoFishHandMatch.new(@player.hand).find_set_of_four(requested_card, @player) # May be incomplete: "requested_card"
 
 			if got_what_they_asked_for == true
 				ask_for(1)
