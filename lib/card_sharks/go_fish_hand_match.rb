@@ -31,6 +31,14 @@ class GoFishHandMatch
 		return counter
 	end
 
+	def find_set_of_four(this_rank)
+		if count_these(this_rank) == 4
+			true
+		else
+			false
+		end
+	end
+
 	def transfer_card(this_rank, giver, taker)
 		giver.each do |card|
 			if card.include?(this_rank)
@@ -38,14 +46,6 @@ class GoFishHandMatch
 				# Recursion, here - start over if a transfer was made
 				transfer_card(this_rank, giver, taker)
 			end
-		end
-	end
-
-	def find_set_of_four(this_rank)
-		if count_these(this_rank) == 4
-			true
-		else
-			false
 		end
 	end
 
