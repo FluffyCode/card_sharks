@@ -10,75 +10,8 @@
 	# when a player's hand contains all 4 suits of a RANK (King King King King), all of those cards are set aside
 		# into a permanent score-pool for that player
 	# player's score based on how many sets of 4 they have, via RANK (King King King King == a set)
-
-	# list of things working properly:
-		# player can only ask for what they have at least 1 of
-		# player gets another turn if they got what they ask for, or on a do_you_have_any or a go_fish
-
-		# dealers_turn:
-			# properly populates cards_to_chose_from
-			# properly randomly selects something to ask for
-
-		# find_matching_set
-
-	# list of thing to do/fix:
-		# Would you like to play a game of Go Fish?
-		# yes
-		# Player hand: Two of Clubs, Nine of Clubs, Eight of Spades, Six of Spades, Eight of Clubs, King of Clubs, King of Spades.
-		# Dealer hand: Two of Hearts, Two of Diamonds, Seven of Spades, Four of Clubs, Six of Diamonds, Five of Spades, Four of Spades.
-		# You get the first turn.
-		# What rank do you want to ask your opponent for?
-		# Two
-		# The dealer had a Two; you add the Two of Hearts to your hand.
-		# You got what you asked for! You get another turn.
-		# What rank do you want to ask your opponent for?
-		# Two
-		# The dealer had a Two; you add the Two of Diamonds to your hand.
-		# You got what you asked for! You get another turn.
-		# What rank do you want to ask your opponent for?
-			# Don't know why this is acting up - I just fixed this in a way that it should have read:
-				# Two
-				# The dealer had a Two; you add the Two of Hearts to your hand.
-				# The dealer had a Two; you add the Two of Diamonds to your hand.
-				# You got what you asked for! You get another turn.
-				# What rank do you want to ask your opponent for?
-
-		# Current stage:
-			# Incorporating find_matching_set into various places - basically, any time either player comes
-			# into posession of a new card - to check to see if they have a full set of 4.
-
-		# What rank do you want to ask your opponent for? (Type 'hand' to see your hand.)
-		# Five
-		# The dealer did not have any: Five.
-		# You fished a Four of Clubs from the pool.
-		# The dealer asks for: Four.
-		# You pass the dealer your Four of Clubs.
-		# The dealer scores with a set of: Four.
-		# The dealer got what they asked for, and gets another turn.
-		# The dealer asks for: Four.
-		# The dealer didn't get a Four, and goes fishing instead.
-		# What rank do you want to ask your opponent for? (Type 'hand' to see your hand.)
-		# hand
-		# Player hand: Ten of Clubs, Seven of Clubs, Jack of Clubs, Six of Spades, Seven of Hearts, King of Diamonds, Jack of Hearts, Ten of Diamonds, King of Spades, Seven of Diamonds, Eight of Diamonds, Ace of Clubs, Ace of Diamonds, Ace of Hearts, Ten of Hearts, Nine of Hearts, Six of Diamonds, Queen of Spades, King of Hearts, Five of Clubs, Queen of Clubs.
-		# Dealer hand: Three of Diamonds, Two of Diamonds, Three of Spades, Four of Spades, Two of Clubs, Two of Spades, Four of Clubs, Nine of Diamonds.
-		# What rank do you want to ask your opponent for? (Type 'hand' to see your hand.)
-			# ^ Here's a problem - all the fours were not removed from the dealer's hand during scoring
-			# And again below:
-		# Player hand: Three of Clubs, Nine of Clubs, Four of Diamonds, Two of Hearts, Eight of Clubs, Queen of Hearts, Queen of Spades, Queen of Clubs, Eight of Diamonds, Nine of Spades, Two of Diamonds, Four of Spades, Three of Hearts, King of Spades, King of Clubs, Five of Hearts.
-		# Dealer hand: Six of Hearts, Five of Diamonds, Ace of Spades, Ace of Diamonds, Jack of Spades, Eight of Spades, Jack of Diamonds, Eight of Hearts, Ace of Clubs.
-		# What rank do you want to ask your opponent for? (Type 'hand' to see your hand.)
-		# Eight
-		# The dealer had a Eight; you add the Eight of Spades to your hand.
-		# The dealer had a Eight; you add the Eight of Hearts to your hand.
-		# You score with a set of: Eight.
-		# You got what you asked for! You get another turn.
-		# What rank do you want to ask your opponent for? (Type 'hand' to see your hand.)
-		# hand
-		# Player hand: Three of Clubs, Nine of Clubs, Four of Diamonds, Two of Hearts, Queen of Hearts, Queen of Spades, Queen of Clubs, Nine of Spades, Two of Diamonds, Four of Spades, Three of Hearts, King of Spades, King of Clubs, Five of Hearts, Eight of Hearts.
-		# Dealer hand: Six of Hearts, Five of Diamonds, Ace of Spades, Ace of Diamonds, Jack of Spades, Jack of Diamonds, Ace of Clubs.
-		# What rank do you want to ask your opponent for? (Type 'hand' to see your hand.)
-
-		# go_fish.rb:134:in `block (2 levels) in find_matching_set': undefined method `include?' for nil:NilClass (NoMethodError)
+	
+# list of thing to do/fix:
 
 require "card_sharks/deck"
 require "card_sharks/player"
@@ -115,13 +48,14 @@ class GoFish
 			dealer_score = @dealer.score_pool.length / 4
 			
 			puts "The game is over; you have #{player_score} sets, and the dealer has #{dealer_score} sets."
-				if player_score > dealer_score
-					puts "You won this round!"
-				else
-					puts "The dealer won this round."
-				end
-				play_a_game
+		
+			if player_score > dealer_score
+				puts "You won this round!"
+			else
+				puts "The dealer won this round."
 			end
+		
+			play_a_game
 		end
 
 		def dealers_turn
@@ -167,7 +101,7 @@ class GoFish
 			end
 
 			hand_length_before_exchange = @player.hand.length
-			GoFishHandMatch.new(@player.hand, @player, @dealer).transfer_card(random_card, @dealer, @player)
+			GoFishHandMatch.new(@player.hand, @player, @dealer).transfer_card(requested_card, @dealer, @player)
 			hand_length_after_exchange = @player.hand.length
 			got_what_they_asked_for = true if hand_length_after_exchange > hand_length_before_exchange
 			GoFishHandMatch.new(@player.hand, @player, @dealer).find_set_of_four(requested_card, @player) # May be incomplete: "requested_card"
@@ -254,8 +188,23 @@ class GoFish
 		end
 
 		# First-time check for any matching sets:
-		find_matching_set(@player)
-		find_matching_set(@dealer)
+		# For the player
+		first_time_check = []
+		@player.hand.length.times do |card|
+			first_time_check << GoFishHandMatch.new(@player.hand, @player, @dealer).strip_suit(card)
+		end
+		first_time_check.each do |card|
+			GoFishHandMatch.new(@player.hand, @player, @dealer).find_set_of_four(card, @player)
+		end
+
+		# For the dealer
+		first_time_check = []
+		@dealer.hand.length.times do |card|
+			first_time_check << GoFishHandMatch.new(@dealer.hand, @player, @dealer).strip_suit(card)
+		end
+		first_time_check.each do |card|
+			GoFishHandMatch.new(@dealer.hand, @player, @dealer).find_set_of_four(card, @dealer)
+		end
 
 		who_goes_first
 	end
