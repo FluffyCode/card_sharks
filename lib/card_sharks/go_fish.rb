@@ -106,19 +106,15 @@ class GoFish
 		puts "Player hand: #{@player.tell_hand}."
 		puts "Dealer hand: #{@dealer.tell_hand}."
 
-		# def pass_cards_around(giver, taker, card)
-			# temp placeholder for passing cards
-		# end
-
 		def tell_card_rank(card, hand)
-			GoFishHandMatch.new(hand).strip_suit(card)
+			GoFishHandMatch.new(hand, @player, @dealer).strip_suit(card)
 		end
 
-		def check_for_game_over
+		def game_end
 			player_score = @player.score_pool.length / 4
 			dealer_score = @dealer.score_pool.length / 4
-			if player_score + dealer_score == 13
-				puts "The game is over; you have #{player_score} sets, and the dealer has #{dealer_score} sets."
+			
+			puts "The game is over; you have #{player_score} sets, and the dealer has #{dealer_score} sets."
 				if player_score > dealer_score
 					puts "You won this round!"
 				else
@@ -133,7 +129,7 @@ class GoFish
 			cards_to_chose_from = []
 			# populate the choice-pool:
 			@dealer.hand.each do |card|
-				cards_to_chose_from << GoFishHandMatch.new(@dealer.hand).strip_suit(card)
+				cards_to_chose_from << GoFishHandMatch.new(@dealer.hand, @player, @dealer).strip_suit(card)
 			end
 			# randomly determine which card the dealer will ask for:
 			random_card = cards_to_chose_from[rand(cards_to_chose_from.length)]
@@ -142,10 +138,13 @@ class GoFish
 
 			got_what_they_asked_for = false
 			hand_length_before_exchange = @dealer.hand.length
-				GoFishHandMatch.new(@dealer.hand).transfer_card(random_card, @player, @dealer)
+			GoFishHandMatch.new(@dealer.hand, @player, @dealer).transfer_card(random_card, @player, @dealer)
 			hand_length_after_exchange = @dealer.hand.length
 			got_what_they_asked_for = true if hand_length_after_exchange > hand_length_before_exchange
-				GoFishHandMatch.new(@dealer.hand).find_set_of_four(random_card, @dealer) # May be incomplete: "random_card"
+			GoFishHandMatch.new(@dealer.hand, @player, @dealer).find_set_of_four(random_card, @dealer) # May be incomplete: "random_card"
+
+			if GoFishHandMatch.new(@dealer.hand, @player, @dealer).check_for_game_end(@player, @dealer) == true
+				game_end
 			end
 
 			if got_what_they_asked_for == true
@@ -161,17 +160,21 @@ class GoFish
 			got_what_they_asked_for = false
 			can_ask_for = false
 
-			can_ask_for = true if GoFishHandMatch.new(@player.hand).count_these(requested_card) > 0
+			can_ask_for = true if GoFishHandMatch.new(@player.hand, @player, @dealer).count_these(requested_card) > 0
 			if can_ask_for == false
 				puts "You cannot ask for that, as you do not have any."
 				ask_for(0)
 			end
 
 			hand_length_before_exchange = @player.hand.length
-				GoFishHandMatch.new(@player.hand).transfer_card(random_card, @dealer, @player)
+			GoFishHandMatch.new(@player.hand, @player, @dealer).transfer_card(random_card, @dealer, @player)
 			hand_length_after_exchange = @player.hand.length
 			got_what_they_asked_for = true if hand_length_after_exchange > hand_length_before_exchange
-				GoFishHandMatch.new(@player.hand).find_set_of_four(requested_card, @player) # May be incomplete: "requested_card"
+			GoFishHandMatch.new(@player.hand, @player, @dealer).find_set_of_four(requested_card, @player) # May be incomplete: "requested_card"
+
+			if GoFishHandMatch.new(@player.hand, @player, @dealer).check_for_game_end(@player, @dealer) == true
+				game_end
+			end
 
 			if got_what_they_asked_for == true
 				ask_for(1)

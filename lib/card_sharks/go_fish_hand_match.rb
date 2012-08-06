@@ -1,6 +1,9 @@
 class GoFishHandMatch
-	def initialize(hand)
+	def initialize(hand, player, dealer)
 		@hand = hand
+
+		@player = player
+		@dealer = dealer
 	end
 
 	def strip_suit(card)
@@ -19,6 +22,15 @@ class GoFishHandMatch
 		return presence_of_card
 	end
 
+	def check_for_end_game(player, dealer)
+		player_score = player.score_pool.length / 4
+		dealer_score = dealer.score_pool.length / 4
+
+		if player_score + dealer_score == 13
+			return true
+		end
+	end
+
 	def count_these(this_rank)
 		counter = 0
 
@@ -34,8 +46,6 @@ class GoFishHandMatch
 	def find_set_of_four(this_rank, player)
 		if count_these(this_rank) == 4
 			add_set_to_score_pool(this_rank, player)
-		else
-			false
 		end
 	end
 
@@ -53,6 +63,9 @@ class GoFishHandMatch
 				taker << giver.delete(card)
 				puts "The dealer passes you their #{card}." if taker == @player
 				puts "You pass the dealer your #{card}." if taker == @dealer
+
+				find_set_of_four(this_rank, taker)
+
 				# Recursion, here - start over if a transfer was made
 				transfer_card(this_rank, giver, taker)
 			end
