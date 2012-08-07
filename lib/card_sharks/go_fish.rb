@@ -12,6 +12,8 @@
 	# player's score based on how many sets of 4 they have, via RANK (King King King King == a set)
 	
 # list of thing to do/fix:
+	# /Users/ey/Code/Ruby/card_sharks/lib/card_sharks/go_fish_hand_match.rb:54: stack level too deep (SystemStackError)
+		# ^ This lovely little thing popped up during one extended test (getting all 4 Tens)
 
 require "card_sharks/deck"
 require "card_sharks/player"
@@ -32,8 +34,8 @@ class GoFish
 		@deck.shuffle!
 
 		# Initial deal; 7 cards go to each player:
-		7.times { @player.deal(@deck.remove_top_card) }
-		7.times { @dealer.deal(@deck.remove_top_card) }
+		52.times { @player.deal(@deck.remove_top_card) }
+		# 7.times { @dealer.deal(@deck.remove_top_card) }
 
 		# Ultimately, these two lines will be removed. Keep for now, while testing
 		puts "Player hand: #{@player.tell_hand}."

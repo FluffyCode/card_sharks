@@ -51,16 +51,19 @@ class GoFishHandMatch
 
 	def add_set_to_score_pool(this_rank, player)
 		player.hand.each do |card|
-			player.add_to_score_pool(card) if card.include?(this_rank)
-			# Recursion, here - start over if a card was added to the score pool
-			add_set_to_score_pool(this_rank, player)
+			if card.include?(this_rank)
+				player.add_to_score_pool(player.hand.delete(card))
+				# Recursion, here - start over if a card was added to the score pool
+				add_set_to_score_pool(this_rank, player)
+			end
 		end
+		check_for_end_game(@player, @dealer)
 	end
 
 	def transfer_card(this_rank, giver, taker)
-		giver.each do |card|
+		giver.hand.each do |card|
 			if card.include?(this_rank)
-				taker << giver.delete(card)
+				taker.hand << giver.hand.delete(card)
 				puts "The dealer passes you their #{card}." if taker == @player
 				puts "You pass the dealer your #{card}." if taker == @dealer
 
