@@ -145,12 +145,15 @@ class GoFish
 			end
 
 			if can_ask_for == true
-				@dealer.hand.each do |card|
-					if card.include?(requested_card)
-						puts "The dealer had a #{requested_card}; you add the #{card} to your hand."
-						@player.deal(@dealer.hand.delete(card))
-						find_matching_set(@player) # find_matching_set here, after getting what they asked for
+				x = 0
+				# Not working - not finding cards that do exist in the dealer's hand
+				until @dealer.hand[x] == nil
+					if @dealer.hand[x].include?(requested_card)
+						puts "The dealer passes you their #{@dealer.hand[x]}."
+						@player.deal(@dealer.hand.delete(@dealer.hand[x]))
 						got_what_they_asked_for = true
+					else
+						x += 1
 					end
 				end
 			else
