@@ -22,15 +22,6 @@ class GoFishHandMatch
 		return presence_of_card
 	end
 
-	def check_for_end_game(player, dealer)
-		player_score = player.score_pool.length / 4
-		dealer_score = dealer.score_pool.length / 4
-
-		if player_score + dealer_score == 13
-			return true
-		end
-	end
-
 	def count_these(this_rank)
 		counter = 0
 
