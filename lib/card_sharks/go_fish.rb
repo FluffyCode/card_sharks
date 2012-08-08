@@ -118,12 +118,17 @@ class GoFish
 			puts "The dealer asks for: #{random_card}."
 
 			got_what_they_asked_for = false
-			@player.hand.each do |card|
-				if card.include?(random_card)
-					@dealer.deal(@player.hand.delete(card))
-					puts "You pass the dealer your #{card}."
-					find_matching_set(@dealer) # find_matching_set here, after getting what they asked for
+
+			# indexing through the player's hand
+			x = 0
+			
+			until @player.hand[x] == nil
+				if @player.hand[x].include?(random_card)
+					puts "You pass the dealer your #{@player.hand[x]}."
+					@dealer.deal(@player.hand.delete(@player.hand[x]))
 					got_what_they_asked_for = true
+				else
+					x += 1
 				end
 			end
 
