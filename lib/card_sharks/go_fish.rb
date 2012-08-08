@@ -10,6 +10,7 @@
 	# when a player's hand contains all 4 suits of a RANK (King King King King), all of those cards are set aside
 		# into a permanent score-pool for that player
 	# player's score based on how many sets of 4 they have, via RANK (King King King King == a set)
+	# If a player runs out of cards he must wait until the game is over and cannot gain any more cards or books. (as per wikipedia)
 
 	# list of thing to do/fix:
 		# The dealer asks for: Seven.
