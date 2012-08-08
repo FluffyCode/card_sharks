@@ -155,15 +155,14 @@ class GoFish
 						x += 1
 					end
 				end
-
-				# the player goes again if they got what they asked for
-				ask_for(1)
 			else
 				puts "You cannot ask for that, as you do not have any."
 				ask_for(0)
 			end
 
-			if got_what_they_asked_for == false
+			if got_what_they_asked_for == true
+				ask_for(1)
+			else
 				puts "The dealer did not have any: #{requested_card}."
 				go_fish(requested_card, @player)
 				dealers_turn
