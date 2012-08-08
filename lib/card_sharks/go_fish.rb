@@ -12,7 +12,15 @@
 	# player's score based on how many sets of 4 they have, via RANK (King King King King == a set)
 
 	# list of thing to do/fix:
-		# Revert to dd5013d
+		# The dealer asks for: Seven.
+		# You pass the dealer your Seven of Hearts.
+		# The dealer got what they asked for, and gets another turn.
+		# The dealer asks for: Seven.
+		# You pass the dealer your Seven of Diamonds.
+			# Dealer has to ask mutliple times to get all of a certain rank.
+
+		# Find a resolution for what to do when a player runs out of cards to chose from.
+			# Also, if the above occurs and the deck is empty.
 
 require "card_sharks/deck"
 require "card_sharks/player"
