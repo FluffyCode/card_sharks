@@ -13,15 +13,7 @@
 	# If a player runs out of cards he must wait until the game is over and cannot gain any more cards or books. (as per wikipedia)
 
 	# list of thing to do/fix:
-		# The dealer asks for: Seven.
-		# You pass the dealer your Seven of Hearts.
-		# The dealer got what they asked for, and gets another turn.
-		# The dealer asks for: Seven.
-		# You pass the dealer your Seven of Diamonds.
-			# Dealer has to ask mutliple times to get all of a certain rank.
-
 		# Find a resolution for what to do when a player runs out of cards to chose from.
-			# Also, if the above occurs and the deck is empty.
 
 require "card_sharks/deck"
 require "card_sharks/player"
