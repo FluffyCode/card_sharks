@@ -53,18 +53,19 @@ class GoFishHandMatch
 	end
 
 	def transfer_card(this_rank, giver, taker)
-		giver.hand.each do |card|
-			if card.include?(this_rank)
-				taker.hand << giver.hand.delete(card)
-				puts "The dealer passes you their #{card}." if taker == @player
-				puts "You pass the dealer your #{card}." if taker == @dealer
+		x = 0
 
-				find_set_of_four(this_rank, taker)
-
-				# Recursion, here - start over if a transfer was made
-				transfer_card(this_rank, giver, taker)
+		until giver.hand[x] == nil
+			if giver.hand[x].include?(this_rank)
+				if taker == @dealer
+					puts "You pass the dealer your #{giver.hand[x]}."
+				else
+					puts "The dealer passes you their #{giver.hand[x]}."
+				end
+				taker.add_to_score_pool(giver.hand.delete(giver.hand[x]))
+			else
+				x += 1
 			end
 		end
 	end
-
 end
