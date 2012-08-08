@@ -3,10 +3,10 @@ class GoFishHandMatch
 		card.to_s.gsub(/( of Clubs)/, "").gsub(/( of Diamonds)/, "").gsub(/( of Hearts)/, "").gsub(/( of Spades)/, "")
 	end
 
-	def count_these(this_rank)
+	def count_these(this_rank, hand)
 		counter = 0
 
-		@hand.each do |card|
+		hand.each do |card|
 			if card.include?(this_rank)
 				counter += 1
 			end
@@ -16,7 +16,7 @@ class GoFishHandMatch
 	end
 
 	def find_set_of_four(this_rank, player)
-		if count_these(this_rank) == 4
+		if count_these(this_rank, player.hand) == 4
 			add_set_to_score_pool(this_rank, player)
 		end
 	end
