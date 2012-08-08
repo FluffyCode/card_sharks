@@ -1,8 +1,4 @@
 class GoFishHandMatch
-	def strip_suit(card)
-		card.to_s.gsub(/( of Clubs)/, "").gsub(/( of Diamonds)/, "").gsub(/( of Hearts)/, "").gsub(/( of Spades)/, "")
-	end
-
 	def count_these(this_rank, hand)
 		counter = 0
 
