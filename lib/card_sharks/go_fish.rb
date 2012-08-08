@@ -146,24 +146,24 @@ class GoFish
 
 			if can_ask_for == true
 				x = 0
-				# Not working - not finding cards that do exist in the dealer's hand
+				
 				until @dealer.hand[x] == nil
 					if @dealer.hand[x].include?(requested_card)
 						puts "The dealer passes you their #{@dealer.hand[x]}."
 						@player.deal(@dealer.hand.delete(@dealer.hand[x]))
-						got_what_they_asked_for = true
 					else
 						x += 1
 					end
 				end
+
+				# the player goes again if they got what they asked for
+				ask_for(1)
 			else
 				puts "You cannot ask for that, as you do not have any."
 				ask_for(0)
 			end
 
-			if got_what_they_asked_for == true
-				ask_for(1)
-			else
+			if got_what_they_asked_for == false
 				puts "The dealer did not have any: #{requested_card}."
 				go_fish(requested_card, @player)
 				dealers_turn
