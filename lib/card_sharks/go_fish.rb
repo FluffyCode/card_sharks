@@ -10,10 +10,9 @@
 	# when a player's hand contains all 4 suits of a RANK (King King King King), all of those cards are set aside
 		# into a permanent score-pool for that player
 	# player's score based on how many sets of 4 they have, via RANK (King King King King == a set)
-	
-# list of thing to do/fix:
-	# /Users/ey/Code/Ruby/card_sharks/lib/card_sharks/go_fish_hand_match.rb:54: stack level too deep (SystemStackError)
-		# ^ This lovely little thing popped up during one extended test (getting all 4 Tens)
+
+	# list of thing to do/fix:
+		# Revert to dd5013d
 
 require "card_sharks/deck"
 require "card_sharks/player"
@@ -34,30 +33,72 @@ class GoFish
 		@deck.shuffle!
 
 		# Initial deal; 7 cards go to each player:
-		52.times { @player.deal(@deck.remove_top_card) }
-		# 7.times { @dealer.deal(@deck.remove_top_card) }
+		7.times { @player.deal(@deck.remove_top_card) }
+		7.times { @dealer.deal(@deck.remove_top_card) }
 
 		# Ultimately, these two lines will be removed. Keep for now, while testing
 		puts "Player hand: #{@player.tell_hand}."
 		puts "Dealer hand: #{@dealer.tell_hand}."
 
-		def tell_card_rank(card, hand)
-			GoFishHandMatch.new(hand, @player, @dealer).strip_suit(card)
+		# def pass_cards_around(giver, taker, card)
+			# temp placeholder for passing cards
+		# end
+
+		def tell_card_rank(card)
+			card.to_s.gsub(/( of Clubs)/, "").gsub(/( of Diamonds)/, "").gsub(/( of Hearts)/, "").gsub(/( of Spades)/, "")
 		end
 
-		def game_end
+		def check_for_game_over
 			player_score = @player.score_pool.length / 4
 			dealer_score = @dealer.score_pool.length / 4
-			
-			puts "The game is over; you have #{player_score} sets, and the dealer has #{dealer_score} sets."
-		
-			if player_score > dealer_score
-				puts "You won this round!"
-			else
-				puts "The dealer won this round."
+			if player_score + dealer_score == 13
+				puts "The game is over; you have #{player_score} sets, and the dealer has #{dealer_score} sets."
+				if player_score > dealer_score
+					puts "You won this round!"
+				else
+					puts "The dealer won this round."
+				end
+				play_a_game
 			end
-		
-			play_a_game
+		end
+
+		def find_matching_set(player)
+			player.hand.each do |card_a|
+				card_to_check_for = tell_card_rank(card_a)
+				this_set = []
+
+				player.hand.each do |card_b|
+					if card_b.include?(card_to_check_for)
+						this_set << card_b
+					end
+				end
+
+				if this_set.length == 4
+					player.hand.each do |card_c|
+						if card_c.include?(card_to_check_for)
+							player.add_to_score_pool(player.hand.delete(card_c))
+							# recursion
+							find_matching_set(player)
+							# this appears to work for the player; but not the dealer:
+
+							# The dealer got what they asked for, and gets another turn.
+							# The dealer asks for: Three.
+							# The dealer didn't get a Three
+							# ...
+							# Dealer hand: Three of Hearts, Three of Clubs, Ten of Clubs.
+						end
+					end
+
+					if player == @dealer
+						puts "The dealer scores with a set of: #{card_to_check_for}."
+					else
+						puts "You score with a set of: #{card_to_check_for}."
+					end
+					find_matching_set(player)
+				end
+			end
+
+			check_for_game_over 
 		end
 
 		def dealers_turn
@@ -65,22 +106,22 @@ class GoFish
 			cards_to_chose_from = []
 			# populate the choice-pool:
 			@dealer.hand.each do |card|
-				cards_to_chose_from << GoFishHandMatch.new(@dealer.hand, @player, @dealer).strip_suit(card)
+				cards_to_chose_from << tell_card_rank(card)
 			end
 			# randomly determine which card the dealer will ask for:
 			random_card = cards_to_chose_from[rand(cards_to_chose_from.length)]
+
 			# ask for it:
 			puts "The dealer asks for: #{random_card}."
 
 			got_what_they_asked_for = false
-			hand_length_before_exchange = @dealer.hand.length
-			GoFishHandMatch.new(@dealer.hand, @player, @dealer).transfer_card(random_card, @player, @dealer)
-			hand_length_after_exchange = @dealer.hand.length
-			got_what_they_asked_for = true if hand_length_after_exchange > hand_length_before_exchange
-			GoFishHandMatch.new(@dealer.hand, @player, @dealer).find_set_of_four(random_card, @dealer) # May be incomplete: "random_card"
-
-			if GoFishHandMatch.new(@dealer.hand, @player, @dealer).check_for_end_game(@player, @dealer) == true
-				game_end
+			@player.hand.each do |card|
+				if card.include?(random_card)
+					@dealer.deal(@player.hand.delete(card))
+					puts "You pass the dealer your #{card}."
+					find_matching_set(@dealer) # find_matching_set here, after getting what they asked for
+					got_what_they_asked_for = true
+				end
 			end
 
 			if got_what_they_asked_for == true
@@ -96,20 +137,22 @@ class GoFish
 			got_what_they_asked_for = false
 			can_ask_for = false
 
-			can_ask_for = true if GoFishHandMatch.new(@player.hand, @player, @dealer).count_these(requested_card) > 0
-			if can_ask_for == false
-				puts "You cannot ask for that, as you do not have any."
-				ask_for(0)
+			@player.hand.each do |card|
+				can_ask_for = true if card.include?(requested_card)
 			end
 
-			hand_length_before_exchange = @player.hand.length
-			GoFishHandMatch.new(@player.hand, @player, @dealer).transfer_card(requested_card, @dealer, @player)
-			hand_length_after_exchange = @player.hand.length
-			got_what_they_asked_for = true if hand_length_after_exchange > hand_length_before_exchange
-			GoFishHandMatch.new(@player.hand, @player, @dealer).find_set_of_four(requested_card, @player) # May be incomplete: "requested_card"
-
-			if GoFishHandMatch.new(@player.hand, @player, @dealer).check_for_end_game(@player, @dealer) == true
-				game_end
+			if can_ask_for == true
+				@dealer.hand.each do |card|
+					if card.include?(requested_card)
+						puts "The dealer had a #{requested_card}; you add the #{card} to your hand."
+						@player.deal(@dealer.hand.delete(card))
+						find_matching_set(@player) # find_matching_set here, after getting what they asked for
+						got_what_they_asked_for = true
+					end
+				end
+			else
+				puts "You cannot ask for that, as you do not have any."
+				ask_for(0)
 			end
 
 			if got_what_they_asked_for == true
@@ -131,10 +174,7 @@ class GoFish
 					puts "You fished a #{card_to_deal} from the pool."
 				end
 
-				# Name the rank of the card just dealt
-				rank_dealt = GoFishHandMatch.new(player.hand, @player, @dealer).strip_suit(card_to_deal)
-				# Find out if it's a full set of 4; if so, it gets put into the player's score pool
-				GoFishHandMatch.new(@player.hand, @player, @dealer).find_set_of_four(rank_dealt, player)
+				find_matching_set(player) # find_matching_set here, after being dealt a card from the "pool"
 
 				# The player gets another turn if they got what they asked for:
 				if card_to_deal.include?(card)
@@ -150,9 +190,9 @@ class GoFish
 				puts "There are no more fish in the pool."
 
 				if player == @dealer
-					dealers_turn
-				else
 					ask_for(0)
+				else
+					dealers_turn
 				end
 			end
 		end
@@ -193,22 +233,25 @@ class GoFish
 		end
 
 		# First-time check for any matching sets:
-		# For the player
-		first_time_check = []
-		@player.hand.length.times do |card|
-			first_time_check << GoFishHandMatch.new(@player.hand, @player, @dealer).strip_suit(card)
-		end
-		first_time_check.each do |card|
-			GoFishHandMatch.new(@player.hand, @player, @dealer).find_set_of_four(card, @player)
-		end
+		find_matching_set(@player)
+		find_matching_set(@dealer)
 
-		# For the dealer
-		first_time_check = []
-		@dealer.hand.length.times do |card|
-			first_time_check << GoFishHandMatch.new(@dealer.hand, @player, @dealer).strip_suit(card)
-		end
-		first_time_check.each do |card|
-			GoFishHandMatch.new(@dealer.hand, @player, @dealer).find_set_of_four(card, @dealer)
+		who_goes_first
+	end
+end
+
+def play_a_game
+	puts "Would you like to play a game of Go Fish?"
+	if gets.chomp.downcase == "yes"
+		GoFish.new.round_of_go_fish
+	else 
+		puts "Alrighty then, another time!"
+		exit 0
+	end
+end
+
+play_a_game
+@dealer).find_set_of_four(card, @dealer)
 		end
 
 		who_goes_first
