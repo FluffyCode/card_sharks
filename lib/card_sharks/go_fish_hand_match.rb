@@ -1,11 +1,4 @@
 class GoFishHandMatch
-	def initialize(hand, player, dealer)
-		@hand = hand
-
-		@player = player
-		@dealer = dealer
-	end
-
 	def strip_suit(card)
 		card.to_s.gsub(/( of Clubs)/, "").gsub(/( of Diamonds)/, "").gsub(/( of Hearts)/, "").gsub(/( of Spades)/, "")
 	end
