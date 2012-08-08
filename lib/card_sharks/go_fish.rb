@@ -74,18 +74,12 @@ class GoFish
 				end
 
 				if this_set.length == 4
-					player.hand.each do |card_c|
-						if card_c.include?(card_to_check_for)
-							player.add_to_score_pool(player.hand.delete(card_c))
-							# recursion
-							find_matching_set(player)
-							# this appears to work for the player; but not the dealer:
-
-							# The dealer got what they asked for, and gets another turn.
-							# The dealer asks for: Three.
-							# The dealer didn't get a Three
-							# ...
-							# Dealer hand: Three of Hearts, Three of Clubs, Ten of Clubs.
+					x = 0
+					until player.hand[x] == nil
+						if player.hand[x].include?(card_to_check_for)
+							player.add_to_score_pool(player.hand.delete(player.hand[x]))
+						else
+							x += 1
 						end
 					end
 
