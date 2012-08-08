@@ -121,7 +121,6 @@ class GoFish
 			@player.hand.each do |card|
 				if card.include?(random_card)
 					GoFishHandMatch.new(@dealer.hand, @player, @dealer).transfer_card(random_card, @player, @dealer)
-					puts "You pass the dealer your #{card}."
 					find_matching_set(@dealer) # find_matching_set here, after getting what they asked for
 					got_what_they_asked_for = true
 				end
@@ -147,8 +146,7 @@ class GoFish
 			if can_ask_for == true
 				@dealer.hand.each do |card|
 					if card.include?(requested_card)
-						puts "The dealer had a #{requested_card}; you add the #{card} to your hand."
-						@player.deal(@dealer.hand.delete(card))
+						GoFishHandMatch.new(@player.hand, @player, @dealer).transfer_card(requested_card, @dealer, @player)
 						find_matching_set(@player) # find_matching_set here, after getting what they asked for
 						got_what_they_asked_for = true
 					end
