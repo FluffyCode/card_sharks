@@ -245,21 +245,3 @@ def play_a_game
 end
 
 play_a_game
-@dealer).find_set_of_four(card, @dealer)
-		end
-
-		who_goes_first
-	end
-end
-
-def play_a_game
-	puts "Would you like to play a game of Go Fish?"
-	if gets.chomp.downcase == "yes"
-		GoFish.new.round_of_go_fish
-	else 
-		puts "Alrighty then, another time!"
-		exit 0
-	end
-end
-
-play_a_game
