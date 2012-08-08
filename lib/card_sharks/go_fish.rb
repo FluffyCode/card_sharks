@@ -151,6 +151,7 @@ class GoFish
 					if @dealer.hand[x].include?(requested_card)
 						puts "The dealer passes you their #{@dealer.hand[x]}."
 						@player.deal(@dealer.hand.delete(@dealer.hand[x]))
+						got_what_they_asked_for = true
 					else
 						x += 1
 					end
