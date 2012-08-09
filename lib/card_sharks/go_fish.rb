@@ -64,36 +64,45 @@ class GoFish
 		end
 
 		def find_matching_set(player)
-			player.hand.each do |card_a|
-				card_to_check_for = tell_card_rank(card_a)
-				this_set = []
+			# look for matching sets
+			ranks_to_search_for = []
+			is_set_of_four = 0
+			player.hand.each do |card|
+				this_rank = tell_card_rank(card)
+				ranks_to_search_for << this_rank
+			end
 
-				player.hand.each do |card_b|
-					if card_b.include?(card_to_check_for)
-						this_set << card_b
-					end
-				end
-
-				if this_set.length == 4
-					x = 0
-					until player.hand[x] == nil
-						if player.hand[x].include?(card_to_check_for)
-							player.add_to_score_pool(player.hand.delete(player.hand[x]))
-						else
-							x += 1
-						end
-					end
-
-					if player == @dealer
-						puts "The dealer scores with a set of: #{card_to_check_for}."
-					else
-						puts "You score with a set of: #{card_to_check_for}."
-					end
-					find_matching_set(player)
+			ranks_to_search_for.each do |rank|
+				@cards_to_score = player.hand.find_all { |card| card.include?(rank) }
+				if @cards_to_score.length == 4
+					is_set_of_four = 1
+					@last_rank_called = rank
+					break
 				end
 			end
 
-			check_for_game_over 
+			# score with the matching sets
+			if is_set_of_four == 1
+				@cards_to_score.each do |card_a|
+					player.hand.each do |card_b|
+						player.hand.delete(card_b) if card_b == card_a
+					end
+				end
+
+				until @cards_to_score.length == 0
+					player.add_to_score_pool(@cards_to_score.delete(@cards_to_score[0]))
+				end
+				
+				# tell the player (or dealer) what they scored with
+				if player == @player
+					puts "You score with a set of #{@last_rank_called}."
+				else
+					puts "The dealer scores with a set of #{@last_rank_called}."
+				end
+			end
+
+			# check for game over
+			check_for_game_over
 		end
 
 		def dealers_turn
@@ -125,6 +134,7 @@ class GoFish
 			end
 
 			if got_what_they_asked_for == true
+				find_matching_set(@dealer)
 				ask_for(2)
 			else
 				puts "The dealer didn't get a #{random_card}, and goes fishing instead."
@@ -159,6 +169,7 @@ class GoFish
 			end
 
 			if got_what_they_asked_for == true
+				find_matching_set(@player)
 				ask_for(1)
 			else
 				puts "The dealer did not have any: #{requested_card}."
