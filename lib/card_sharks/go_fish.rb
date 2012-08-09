@@ -1,4 +1,4 @@
-# go_fish.rb version 0.2
+# go_fish.rb version 1.0
 
 # initial setup for now; [important] stuff to remember for later:
 	# players take turns asking for cards from one another
@@ -13,7 +13,10 @@
 	# If a player runs out of cards he must wait until the game is over and cannot gain any more cards or books. (as per wikipedia)
 
 	# list of thing to do/fix:
-		# Find a resolution for what to do when a player runs out of cards to chose from.
+		# The game is over; you have 9 sets, and the dealer has 4 sets.
+		# You won this round!
+		# Would you like to play a game of Go Fish?
+			# Halle-freakin'-lujah!
 
 require "card_sharks/deck"
 require "card_sharks/player"
@@ -106,6 +109,12 @@ class GoFish
 		end
 
 		def dealers_turn
+			# If the dealer has no cards remaining:
+			if @dealer.hand.length == 0
+				puts "The dealer is out of cards."
+				ask_for(0)
+			end
+
 			# dealer gets a pool of ranks to chose from:
 			cards_to_chose_from = []
 			# populate the choice-pool:
@@ -144,6 +153,12 @@ class GoFish
 		end
 
 		def player_turn(requested_card)
+			# If the player has no cards remaining:
+			if @player.hand.length == 0
+				puts "You are out of cards."
+				dealers_turn
+			end
+
 			got_what_they_asked_for = false
 			can_ask_for = false
 
