@@ -40,10 +40,6 @@ class GoFish
 		puts "Player hand: #{@player.tell_hand}."
 		puts "Dealer hand: #{@dealer.tell_hand}."
 
-		# def pass_cards_around(giver, taker, card)
-			# temp placeholder for passing cards
-		# end
-
 		def tell_card_rank(card)
 			card.to_s.gsub(/( of Clubs)/, "").gsub(/( of Diamonds)/, "").gsub(/( of Hearts)/, "").gsub(/( of Spades)/, "")
 		end
