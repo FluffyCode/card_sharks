@@ -13,10 +13,6 @@
 	# If a player runs out of cards he must wait until the game is over and cannot gain any more cards or books. (as per wikipedia)
 
 	# list of thing to do/fix:
-		# The game is over; you have 9 sets, and the dealer has 4 sets.
-		# You won this round!
-		# Would you like to play a game of Go Fish?
-			# Halle-freakin'-lujah!
 
 require "card_sharks/deck"
 require "card_sharks/player"
@@ -53,9 +49,7 @@ class GoFish
 		end
 
 		def check_for_game_over
-			player_score = @player.score_pool.length / 4
-			dealer_score = @dealer.score_pool.length / 4
-			if player_score + dealer_score == 13
+			if ((@player.score_pool.length / 4) +  @dealer.score_pool.length / 4) == 13
 				puts "The game is over; you have #{player_score} sets, and the dealer has #{dealer_score} sets."
 				if player_score > dealer_score
 					puts "You won this round!"
