@@ -49,7 +49,9 @@ class GoFish
 		end
 
 		def check_for_game_over
-			if ((@player.score_pool.length / 4) +  @dealer.score_pool.length / 4) == 13
+			player_score = @player.score_pool.length / 4
+			dealer_score = @dealer.score_pool.length / 4
+			if player_score + dealer_score == 13
 				puts "The game is over; you have #{player_score} sets, and the dealer has #{dealer_score} sets."
 				if player_score > dealer_score
 					puts "You won this round!"
