@@ -1,4 +1,4 @@
-# go_fish.rb version 1.0
+# go_fish.rb version 1.1
 
 # initial setup for now; [important] stuff to remember for later:
 	# players take turns asking for cards from one another
@@ -33,8 +33,8 @@ class GoFish
 		@deck.shuffle!
 
 		# Initial deal; 7 cards go to each player:
-		7.times { @player.deal(@deck.remove_top_card) }
-		7.times { @dealer.deal(@deck.remove_top_card) }
+		52.times { @player.deal(@deck.remove_top_card) }
+		# 7.times { @dealer.deal(@deck.remove_top_card) }
 
 		# Ultimately, these two lines will be removed. Keep for now, while testing
 		puts "Player hand: #{@player.tell_hand}."
@@ -63,8 +63,7 @@ class GoFish
 			ranks_to_search_for = []
 			is_set_of_four = 0
 			player.hand.each do |card|
-				this_rank = tell_card_rank(card)
-				ranks_to_search_for << this_rank
+				ranks_to_search_for << tell_card_rank(card)
 			end
 
 			ranks_to_search_for.each do |rank|
