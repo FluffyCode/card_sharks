@@ -1,30 +1,38 @@
 class GoFishHandMatch
-	def count_these(this_rank, hand)
-		counter = 0
+	def find_matching_set(player)
+		# look for matching sets
+		ranks_to_search_for = []
+		is_set_of_four = 0
+		player.hand.each do |card|
+			ranks_to_search_for << tell_card_rank(card)
+		end
 
-		hand.each do |card|
-			if card.include?(this_rank)
-				counter += 1
+		ranks_to_search_for.each do |rank|
+			@cards_to_score = player.hand.find_all { |card| card.include?(rank) }
+			if @cards_to_score.length == 4
+				is_set_of_four = 1
+				@last_rank_called = rank
+				break
 			end
 		end
 
-		return counter
-	end
+		# score with the matching sets
+		if is_set_of_four == 1
+			@cards_to_score.each do |card_a|
+				player.hand.each do |card_b|
+					player.hand.delete(card_b) if card_b == card_a
+				end
+			end
 
-	def find_set_of_four(this_rank, player)
-		if count_these(this_rank, player.hand) == 4
-			add_set_to_score_pool(this_rank, player)
-		end
-	end
-
-	def add_set_to_score_pool(this_rank, player)
-		x = 0
-
-		until player.hand[x] == nil
-			if player.hand[x].include?(this_rank)
-				player.add_to_score_pool(player.hand.delete(player.hand[x]))
+			until @cards_to_score.length == 0
+				player.add_to_score_pool(@cards_to_score.delete(@cards_to_score[0]))
+			end
+			
+			# tell the player (or dealer) what they scored with
+			if player == @player
+				puts "You score with a set of #{@last_rank_called}."
 			else
-				x += 1
+				puts "The dealer scores with a set of #{@last_rank_called}."
 			end
 		end
 	end
