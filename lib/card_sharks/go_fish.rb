@@ -33,12 +33,11 @@ class GoFish
 		@deck.shuffle!
 
 		# Initial deal; 7 cards go to each player:
-		52.times { @player.deal(@deck.remove_top_card) }
-		# 7.times { @dealer.deal(@deck.remove_top_card) }
+		7.times { @player.deal(@deck.remove_top_card) }
+		7.times { @dealer.deal(@deck.remove_top_card) }
 
 		# Ultimately, these two lines will be removed. Keep for now, while testing
 		puts "Player hand: #{@player.tell_hand}."
-		puts "Dealer hand: #{@dealer.tell_hand}."
 
 		def tell_card_rank(card)
 			card.to_s.gsub(/( of Clubs)/, "").gsub(/( of Diamonds)/, "").gsub(/( of Hearts)/, "").gsub(/( of Spades)/, "")
@@ -230,8 +229,6 @@ class GoFish
 			if requested_card == "hand"
 				puts
 				puts "Player hand: #{@player.tell_hand}."
-				# Remove the dealer after testing:
-				puts "Dealer hand: #{@dealer.tell_hand}."
 				puts
 				ask_for(0)
 			else
@@ -241,9 +238,7 @@ class GoFish
 
 		# determine who goes first
 		def who_goes_first
-			# In the final version, uncomment the following line. Just for testing, player gets the first turn.
-			# if rand(2) == 1
-			if 1 == 1
+			if rand(2) == 1
 				puts "You get the first turn."
 				ask_for(0)
 			else
