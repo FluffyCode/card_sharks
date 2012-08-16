@@ -1,23 +1,22 @@
 # go_fish.rb version 1.1
 
-# initial setup for now; [important] stuff to remember for later:
-	# players take turns asking for cards from one another
-	# if a player has what the other asks for, the latter must turn over ALL cards of that RANK to the asking player
-	# if a player gets what they ask for, they get another turn
-	# if a player doesn't get what they ask for from another player, but get what they asked for from "going fishing,"
-		# they get another turn - also, they must announce that they got what they asked for
-	# a player CANNOT ask for something if THEY DO NOT have at least one of what they are asking for
-	# when a player's hand contains all 4 suits of a RANK (King King King King), all of those cards are set aside
-		# into a permanent score-pool for that player
-	# player's score based on how many sets of 4 they have, via RANK (King King King King == a set)
+# Game rules:
+	# Players take turns asking for cards from one another.
+	# If a player has what the other asks for, the latter must turn over ALL cards of that RANK to the asking player.
+	# If a player gets what they ask for, they get another turn.
+	# If a player doesn't get what they ask for from another player, but get what they asked for from "going fishing,"
+		# they get another turn - they announce that they got what they asked for.
+	# A player CANNOT ask for something if they DO NOT have at least one of what they are asking for
+	# When a player's hand contains all 4 suits of a RANK (ie, King King King King), all of those cards are set aside
+		# into a permanent score-pool for that player.
+	# Player's score based on how many sets of 4 they have.
 	# If a player runs out of cards he must wait until the game is over and cannot gain any more cards or books. (as per wikipedia)
 
-	# list of thing to do/fix:
+	# List of thing to do/fix:
 
 require "card_sharks/deck"
 require "card_sharks/player"
 require "card_sharks/dealer"
-require "card_sharks/go_fish_hand_match.rb"
 
 class GoFish
 	def initialize
@@ -36,10 +35,9 @@ class GoFish
 		7.times { @player.deal(@deck.remove_top_card) }
 		7.times { @dealer.deal(@deck.remove_top_card) }
 
-		# Ultimately, these two lines will be removed. Keep for now, while testing
 		puts "Player hand: #{@player.tell_hand}."
 
-		def tell_card_rank(card)
+		def strip_suit(card)
 			card.to_s.gsub(/( of Clubs)/, "").gsub(/( of Diamonds)/, "").gsub(/( of Hearts)/, "").gsub(/( of Spades)/, "")
 		end
 
@@ -62,7 +60,7 @@ class GoFish
 			ranks_to_search_for = []
 			is_set_of_four = 0
 			player.hand.each do |card|
-				ranks_to_search_for << tell_card_rank(card)
+				ranks_to_search_for << strip_suit(card)
 			end
 
 			ranks_to_search_for.each do |rank|
@@ -109,7 +107,7 @@ class GoFish
 			cards_to_chose_from = []
 			# populate the choice-pool:
 			@dealer.hand.each do |card|
-				cards_to_chose_from << tell_card_rank(card)
+				cards_to_chose_from << strip_suit(card)
 			end
 			# randomly determine which card the dealer will ask for:
 			random_card = cards_to_chose_from[rand(cards_to_chose_from.length)]
