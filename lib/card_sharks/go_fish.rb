@@ -2,10 +2,10 @@
 
 # Game rules:
 	# Players take turns asking for cards from one another.
-	# If a player has what the other asks for, the latter must turn over ALL cards of that RANK to the asking player.
+	# If Player A has what Player B asks for, the Player A must turn over ALL cards of that RANK to Player B.
 	# If a player gets what they ask for, they get another turn.
-	# If a player doesn't get what they ask for from another player, but get what they asked for from "going fishing,"
-		# they get another turn - they announce that they got what they asked for.
+	# If Player A doesn't get what they ask for from Player B, but gets what they asked for from "going fishing,"
+		# Player A gets another turn - they announce that they got what they asked for.
 	# A player CANNOT ask for something if they DO NOT have at least one of what they are asking for
 	# When a player's hand contains all 4 suits of a RANK (ie, King King King King), all of those cards are set aside
 		# into a permanent score-pool for that player.
