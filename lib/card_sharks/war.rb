@@ -35,11 +35,6 @@ class War
 		26.times { @player.deal(@deck.remove_top_card) }
 		# ...and the other half goes to the dealer
 		26.times { @dealer.deal(@deck.remove_top_card) }
-
-		# Test lines: ensure player & dealer have been dealt 26 cards, and that the deck is empty:
-		puts "You have been dealt #{@player.hand.length} cards."
-		puts "The dealer has been dealt #{@dealer.hand.length} cards."
-		puts "There are #{@deck.length} cards left in the deck."
 	end
 end
 
