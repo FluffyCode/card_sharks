@@ -1,4 +1,4 @@
-# add_a_card.rb version 0.1
+# add_a_card.rb version 1.0
 
 require "card_sharks/deck"
 require "card_sharks/add_a_card_value"
@@ -60,19 +60,15 @@ class Add_A_Card
 			puts "What is the sum of:"
 			puts "#{@this_round_of_cards.join(" - ")}"
 
-			is_correct = Timeout::timeout(@countdown_timer) {
-				@user_determined_number = gets.chomp.to_i
+			begin
+				is_correct = Timeout::timeout(@countdown_timer) {
+					@user_determined_number = gets.chomp.to_i
 
-				if (@user_determined_number == evaluate_this_round(@this_round_of_cards))
-					true
-				else
-					false
-				end
-			}
-
-
-			if (is_correct == true)
-				@num_correct += 1
+					if (@user_determined_number == evaluate_this_round(@this_round_of_cards))
+						@num_correct += 1
+					end
+				}
+			rescue
 			end
 		end	# end main game loop
 
