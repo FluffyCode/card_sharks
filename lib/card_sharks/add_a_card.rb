@@ -1,6 +1,8 @@
 # add_a_card.rb version 0.1
 
 require "card_sharks/deck"
+require "card_sharks/add_a_card_value"
+require "timeout"
 
 # Game rules for "Add A Card"
 	# From http://tlc.howstuffworks.com/family/card-games-for-kids3.htm
@@ -15,6 +17,12 @@ class Add_A_Card
 	def strip_suit(card)
 		card.to_s.gsub(/( of Clubs)/, "").gsub(/( of Diamonds)/, "").gsub(/( of Hearts)/, "").gsub(/( of Spades)/, "")
 	end
+
+	def evaluate_this_round(cards)
+		this_result = (AddACardValue.new(cards)).value
+	end
+
+
 
 	def round_of_add_a_card
 		# Create the deck and shuffle it
@@ -36,15 +44,40 @@ class Add_A_Card
 
 
 
+		# Main game variables
+		@countdown_timer = 1 + @user_difficulty
+		@num_correct = 0
+
+
+
 		# Main game loop
 		until @deck.length == 0	# Until all cards in the deck have been exhausted, the game is played
 			@this_round_of_cards = []
 
-			2.times { @this_round_of_cards << strip_suit(@deck.remove_top_card) }
+			2.times { @this_round_of_cards << @deck.remove_top_card }
 
 			puts ""
-			puts "This round, the two cards are: #{@this_round_of_cards}."
+			puts "What is the sum of:"
+			puts "#{@this_round_of_cards.join(" - ")}"
+
+			is_correct = Timeout::timeout(@countdown_timer) {
+				@user_determined_number = gets.chomp.to_i
+
+				if (@user_determined_number == evaluate_this_round(@this_round_of_cards))
+					true
+				else
+					false
+				end
+			}
+
+
+			if (is_correct == true)
+				@num_correct += 1
+			end
 		end	# end main game loop
+
+		puts ""
+		puts "Out of 26 rounds, you got #{@num_correct} correct."
 	end	# end round_of_add_a_card
 
 end
