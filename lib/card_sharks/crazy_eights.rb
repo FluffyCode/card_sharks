@@ -61,7 +61,9 @@ class CrazyEights
 			puts ""
 			puts "If you can/do not wish to play, type 'pass' to pass."
 
-			if gets.chomp.downcase == "pass"	# if the player passes...
+			@user_input = gets.chomp
+
+			if @user_input.downcase == "pass"	# if the player passes...
 				if @deck.deck(0) != nil	# ...and cards still remain in the draw pile...
 					@player.deal(@deck.remove_top_card)	# ...the player draws from the top of the draw pile...
 					puts "You draw #{@player.hand[-1]} from the draw pile."
@@ -70,8 +72,8 @@ class CrazyEights
 					dealers_turn	# ...skip drawing (as it cannot be done), and go to the dealer's turn
 				end
 
-			else
-
+			elsif @user_input.to_i > 0 && @user_input.to_i < (@player.hand.length + 1)
+				puts "You chose to play: #{@player.hand[@user_input.to_i - 1]}."
 			end
 
 		end	# end of players_turn
