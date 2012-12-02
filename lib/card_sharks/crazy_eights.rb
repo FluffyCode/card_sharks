@@ -70,15 +70,18 @@ class CrazyEights
 					players_turn
 				else	# ...else, if no cards remain in the draw pile...
 					dealers_turn	# ...skip drawing (as it cannot be done), and go to the dealer's turn
+				end	# end of 'pass' if/else
+
+			else	# if 'pass' is not the user's input...
+				@user_input = @user_input.to_i # ...convert it to an integer...
+			
+				if @user_input > 0 && @user_input < @player.hand.length + 1 # ...and see if it is in the appropriate range
+					puts "You chose to play: #{@player.hand[@user_input - 1]}."	# play the card.
+				else	# otherwise...
+					puts ""	# ...throw the error...
+					puts "Error: was expecting 'pass' or an integer between 1 and #{@player.hand.length}."
+					players_turn	# put the player back into the loop
 				end
-
-			elsif @user_input.to_i > 0 && @user_input.to_i < @player.hand.length + 1
-				puts "You chose to play: #{@player.hand[@user_input.to_i - 1]}."
-
-			else
-				puts ""
-				puts "Error: was expecting 'pass' or an integer between 1 and #{@player.hand.length}."
-				players_turn
 			end
 
 		end	# end of players_turn
