@@ -42,7 +42,7 @@ class CrazyEights
 		@dealer = Dealer.new
 	end
 
-	def RoundOfCrazyEights
+	def round_of_crazy_eights
 		@deck = Deck.new
 		@deck.shuffle!
 
@@ -64,7 +64,8 @@ class CrazyEights
 			if gets.chomp.downcase == "pass"	# if the player passes...
 				if @deck.deck(0) != nil	# ...and cards still remain in the draw pile...
 					@player.deal(@deck.remove_top_card)	# ...the player draws from the top of the draw pile...
-					dealers_turn	# ...then the game goes on to the dealer's turn.
+					puts "You draw #{@player.hand[-1]} from the draw pile."
+					players_turn
 				else	# ...else, if no cards remain in the draw pile...
 					dealers_turn	# ...skip drawing (as it cannot be done), and go to the dealer's turn
 				end
@@ -82,6 +83,9 @@ class CrazyEights
 
 
 
-	end # end of RoundOfCrazyEights
+		players_turn
+	end # end of round_of_crazy_eights
 
 end	# end of CrazyEights class
+
+CrazyEights.new.round_of_crazy_eights
