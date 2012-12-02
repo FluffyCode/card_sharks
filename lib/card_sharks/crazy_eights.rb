@@ -52,7 +52,6 @@ class CrazyEights
 		# Next card taken from the deck becomes the start of the discard pile
 		@discard_pile = @deck.remove_top_card
 
-		# Players turn
 		def players_turn
 			puts ""
 			puts "The top card on the discard pile is: #{@discard_pile}."
@@ -63,28 +62,28 @@ class CrazyEights
 
 			@user_input = gets.chomp
 
-			if @user_input.downcase == "pass"	# if the player passes...
-				if @deck.deck(0) != nil	# ...and cards still remain in the draw pile...
-					@player.deal(@deck.remove_top_card)	# ...the player draws from the top of the draw pile...
+			if @user_input.downcase == "pass"
+				if @deck.deck(0) != nil
+					@player.deal(@deck.remove_top_card)
 					puts "You draw #{@player.hand[-1]} from the draw pile."
 					players_turn
-				else	# ...else, if no cards remain in the draw pile...
-					dealers_turn	# ...skip drawing (as it cannot be done), and go to the dealer's turn
-				end	# end of 'pass' if/else
+				else
+					dealers_turn
+				end
 
-			else	# if 'pass' is not the user's input...
-				@user_input = @user_input.to_i # ...convert it to an integer...
+			else
+				@user_input = @user_input.to_i
 			
-				if @user_input > 0 && @user_input < @player.hand.length + 1 # ...and see if it is in the appropriate range
-					puts "You chose to play: #{@player.hand[@user_input - 1]}."	# play the card.
-				else	# otherwise...
-					puts ""	# ...throw the error...
+				if @user_input > 0 && @user_input < @player.hand.length + 1
+					puts "You chose to play: #{@player.hand[@user_input - 1]}."
+				else
+					puts ""
 					puts "Error: was expecting 'pass' or an integer between 1 and #{@player.hand.length}."
-					players_turn	# put the player back into the loop
+					players_turn
 				end
 			end
 
-		end	# end of players_turn
+		end
 
 		# Dealers turn
 		def dealers_turn
