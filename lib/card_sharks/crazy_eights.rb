@@ -87,14 +87,9 @@ class CrazyEights
 						puts ""
 						puts "You play your #{@player.hand[@user_input]}."
 						@discard_pile = @player.hand.delete_at(@user_input)
-						puts ""
-						puts "New hand is:"
-						puts "#{@player.tell_hand}"
-						# if # if it was an Eight
-						# 	# Do stuff when an 8 is played: player nominates a new suit
-						# else
-							
-						# end
+
+						intermediary_stage("player")
+						
 					else
 						puts ""
 						puts "You cannot play #{@player.hand[@user_input]} - either rank or suit (or both) does not match."
@@ -110,6 +105,34 @@ class CrazyEights
 
 		end
 
+		# Intermediary stage - check for the play of 8's here
+		def intermediary_stage(player)
+			if player == "player"	# If the player just had their turn...
+				if @discard_pile::rank == "Eight"	# ...and it was an eight
+					puts ""
+					puts "You played an Eight - nominate a new rank: Clubs, Diamonds, Hearts or Spades."
+
+					new_suit = gets.chomp.downcase	# ...the player nominates a new suit
+					if new_suit != "clubs" || new_suit != "diamonds" || new_suit != "hearts" || new_suit != "spades"
+						puts ""
+						puts "Error: was expecting a string for a new suit."
+						intermediary_stage("player")	# player gets put back into the loop on a bad input
+					else
+						@discard_pile::suit = new_suit	# change the suit of the card on the discard pile
+						puts ""
+						puts "You chose to change the playable suit to #{new_suit}."
+						puts ""
+						puts "#{@discard_pile}."
+					end
+				else	# otherwise we do the dealer's stuff...later
+
+				end
+
+			elsif player == "dealer"
+				# Do the dealer's stuff to check for an 8
+			end
+		end
+
 		# Dealers turn
 		def dealers_turn
 
@@ -123,3 +146,9 @@ class CrazyEights
 end	# end of CrazyEights class
 
 CrazyEights.new.round_of_crazy_eights
+
+# Current issue:
+	# somewhere in the intermediary_stage method, lines 115/116, the code is not taking "clubs", "diamonds",
+	# "hearts" or "spades" - it deems everything an invalid input (even invalid input - but that's a good thing)
+	# Tl;dr, infinite loops.  Figure it out, fix it.
+	
