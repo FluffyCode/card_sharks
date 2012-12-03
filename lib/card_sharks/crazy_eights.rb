@@ -85,7 +85,16 @@ class CrazyEights
 
 					if check_for_match(@discard_pile, @player.hand[@user_input])
 						puts ""
-						puts "Yay, it matches!"
+						puts "You play your #{@player.hand[@user_input]}."
+						@discard_pile = @player.hand.delete_at(@user_input)
+						puts ""
+						puts "New hand is:"
+						puts "#{@player.tell_hand}"
+						# if # if it was an Eight
+						# 	# Do stuff when an 8 is played: player nominates a new suit
+						# else
+							
+						# end
 					else
 						puts ""
 						puts "You cannot play #{@player.hand[@user_input]} - either rank or suit (or both) does not match."
