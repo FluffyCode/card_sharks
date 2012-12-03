@@ -108,12 +108,3 @@ class CrazyEights
 end	# end of CrazyEights class
 
 CrazyEights.new.round_of_crazy_eights
-
-# Current issue: checking for ranks and/or suits of the card.
-	# The top card on the discard pile is: Eight of Diamonds.
-	# What card would you like to play?  Your hand contains:
-	# Six of Hearts, Three of Diamonds, Two of Diamonds, Six of Diamonds, Ten of Clubs, Nine of Spades, Six of Spades
-
-	# If you can/do not wish to play, type 'pass' to pass.
-	# 2
-	# crazy_eights.rb:80:in `players_turn': undefined method `ranks' for Three of Diamonds:Card (NoMethodError)
