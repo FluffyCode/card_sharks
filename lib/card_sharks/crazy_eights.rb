@@ -113,19 +113,19 @@ class CrazyEights
 					puts "You played an Eight - nominate a new rank: Clubs, Diamonds, Hearts or Spades."
 
 					@new_suit = gets.chomp.downcase.capitalize!	# ...the player nominates a new suit...
-					if @new_suit != "Clubs" || @new_suit != "Diamonds" || @new_suit != "Hearts" || @new_suit != "Spades"
-						puts ""
-						puts "Error: was expecting a string for a new suit."
-						intermediary_stage(player)	# player gets put back into the loop on a bad input
-					else
+					if @new_suit == "Clubs" || @new_suit == "Diamonds" || @new_suit == "Hearts" || @new_suit == "Spades"
 						@discard_pile::suit = @new_suit	# change the suit of the card on the discard pile
 						puts ""
 						puts "You chose to change the playable suit to: #{@new_suit}."
 						puts ""
-						puts "#{@discard_pile}."
+						puts "The top card on the discard pile is: #{@discard_pile}."
+					else # player gets put back into the loop on a bad input
+						puts ""
+						puts "Error: was expecting a string for a new suit."
+						intermediary_stage(player)
 					end
 				else	# otherwise, go to the dealer's turn
-
+					dealers_turn
 				end
 
 			elsif player == "dealer"
