@@ -108,23 +108,23 @@ class CrazyEights
 		# Intermediary stage - check for the play of 8's here
 		def intermediary_stage(player)
 			if player == "player"	# If the player just had their turn...
-				if @discard_pile::rank == "Eight"	# ...and it was an eight
+				if @discard_pile::rank == "Eight"	# ...and it was an eight...
 					puts ""
 					puts "You played an Eight - nominate a new rank: Clubs, Diamonds, Hearts or Spades."
 
-					new_suit = gets.chomp.downcase	# ...the player nominates a new suit
-					if new_suit != "clubs" || new_suit != "diamonds" || new_suit != "hearts" || new_suit != "spades"
+					@new_suit = gets.chomp.downcase.capitalize!	# ...the player nominates a new suit...
+					if @new_suit != "Clubs" || @new_suit != "Diamonds" || @new_suit != "Hearts" || @new_suit != "Spades"
 						puts ""
 						puts "Error: was expecting a string for a new suit."
-						intermediary_stage("player")	# player gets put back into the loop on a bad input
+						intermediary_stage(player)	# player gets put back into the loop on a bad input
 					else
-						@discard_pile::suit = new_suit	# change the suit of the card on the discard pile
+						@discard_pile::suit = @new_suit	# change the suit of the card on the discard pile
 						puts ""
-						puts "You chose to change the playable suit to #{new_suit}."
+						puts "You chose to change the playable suit to: #{@new_suit}."
 						puts ""
 						puts "#{@discard_pile}."
 					end
-				else	# otherwise we do the dealer's stuff...later
+				else	# otherwise, go to the dealer's turn
 
 				end
 
