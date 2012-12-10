@@ -129,13 +129,21 @@ class CrazyEights
 				end
 
 			elsif player == "dealer"
-				# Do the dealer's stuff to check for an 8
+				
 			end
 		end
 
 		# Dealers turn
 		def dealers_turn
+			@dealer.hand.each do |card|	# go through each card in the dealer's hand in turn...
+				if check_for_match(@discard_pile, card)	# ...and if it can be played, the dealer does so
+					puts ""
+					puts "The dealer plays their #{card]}."
+					@discard_pile = @dealer.hand.delete(card)
 
+					intermediary_stage("dealer")
+				end
+			end	# end of each-do
 		end	# end of dealers_turn
 
 
