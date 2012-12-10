@@ -107,8 +107,10 @@ class CrazyEights
 
 		# Intermediary stage - check for the play of 8's here
 		def intermediary_stage(player)
+			is_an_eight = true if @discard_pile::rank == "Eight"
+
 			if player == "player"	# If the player just had their turn...
-				if @discard_pile::rank == "Eight"	# ...and it was an eight...
+				if is_an_eight	# ...and it was an eight...
 					puts ""
 					puts "You played an Eight - nominate a new rank: Clubs, Diamonds, Hearts or Spades."
 
@@ -129,7 +131,25 @@ class CrazyEights
 				end
 
 			elsif player == "dealer"
-				
+				if is_an_eight	# if the dealer played an eight...
+					random_num = Math.floor(Math.random(@dealer.hand.length))
+
+					@discard_pile::suit = @dealer.hand[random_num]::suit
+
+					puts ""
+					puts "The dealer played an Eight, and decided to change the suit to #{@dealer.hand[random_num]::suit}."
+					puts ""
+					puts "The top card on the discard pile is: #{@discard_pile}."
+				else	# if it wasn't an eight...
+					players_turn
+				end
+			
+			else
+				if player == "player"
+					dealers_turn
+				else
+					players_turn
+				end
 			end
 		end
 
