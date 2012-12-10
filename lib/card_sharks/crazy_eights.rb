@@ -146,7 +146,7 @@ class CrazyEights
 			else
 				players_turn
 			end
-		end
+		end	# end of intermediary_stage
 
 		# Dealers turn
 		def dealers_turn
@@ -159,6 +159,19 @@ class CrazyEights
 					intermediary_stage("dealer")
 				end
 			end	# end of each-do
+
+			# if a card has not been played by this point:
+			if @deck.deck(0) != nil
+				@dealer.deal(@deck.remove_top_card)
+				puts ""
+				puts "The dealer was unable to play a card, and draws from the draw pile."
+				dealers_turn
+			else
+				puts ""
+				puts "The dealer was unable to play a card."
+				players_turn
+			end
+
 		end	# end of dealers_turn
 
 
