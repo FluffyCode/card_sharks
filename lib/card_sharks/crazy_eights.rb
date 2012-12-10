@@ -88,8 +88,7 @@ class CrazyEights
 						puts "You play your #{@player.hand[@user_input]}."
 						@discard_pile = @player.hand.delete_at(@user_input)
 
-						intermediary_stage("player")
-						
+						intermediary_stage("player")			
 					else
 						puts ""
 						puts "You cannot play #{@player.hand[@user_input]} - either rank or suit (or both) does not match."
@@ -128,7 +127,6 @@ class CrazyEights
 						puts "Error: was expecting a string for a new suit."
 						intermediary_stage(player)
 					end
-				end
 
 				elsif player == "dealer"
 					random_num = Math.floor(Math.random(@dealer.hand.length))
@@ -141,13 +139,12 @@ class CrazyEights
 
 					players_turn
 				end
+			end
 			
+			if player == "player"
+				dealers_turn
 			else
-				if player == "player"
-					dealers_turn
-				else
-					players_turn
-				end
+				players_turn
 			end
 		end
 
