@@ -109,29 +109,28 @@ class CrazyEights
 		def intermediary_stage(player)
 			is_an_eight = true if @discard_pile::rank == "Eight"
 
-			if player == "player"	# If the player just had their turn...
-				if is_an_eight	# ...and it was an eight...
+			if is_an_eight
+				if player == "player"
 					puts ""
 					puts "You played an Eight - nominate a new rank: Clubs, Diamonds, Hearts or Spades."
 
-					@new_suit = gets.chomp.downcase.capitalize!	# ...the player nominates a new suit...
+					@new_suit = gets.chomp.downcase.capitalize!
 					if @new_suit == "Clubs" || @new_suit == "Diamonds" || @new_suit == "Hearts" || @new_suit == "Spades"
-						@discard_pile::suit = @new_suit	# change the suit of the card on the discard pile
+						@discard_pile::suit = @new_suit
 						puts ""
 						puts "You chose to change the playable suit to: #{@new_suit}."
 						puts ""
 						puts "The top card on the discard pile is: #{@discard_pile}."
-					else # player gets put back into the loop on a bad input
+
+						dealers_turn
+					else
 						puts ""
 						puts "Error: was expecting a string for a new suit."
 						intermediary_stage(player)
 					end
-				else	# otherwise, go to the dealer's turn
-					dealers_turn
 				end
 
-			elsif player == "dealer"
-				if is_an_eight	# if the dealer played an eight...
+				elsif player == "dealer"
 					random_num = Math.floor(Math.random(@dealer.hand.length))
 
 					@discard_pile::suit = @dealer.hand[random_num]::suit
@@ -139,8 +138,7 @@ class CrazyEights
 					puts ""
 					puts "The dealer played an Eight, and decided to change the suit to #{@dealer.hand[random_num]::suit}."
 					puts ""
-					puts "The top card on the discard pile is: #{@discard_pile}."
-				else	# if it wasn't an eight...
+
 					players_turn
 				end
 			
