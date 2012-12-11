@@ -42,21 +42,6 @@ require "card_sharks/dealer"
 
 
 
-		# During one test run, player ran into a "dry streak" - was not able to play any cards, and had to 'pass'
-		# multiple times.  Though this is not an issue (indeed, it is well within the rules of the game), it was 
-		# inconvenient having to count out the number of cards in the player's hand.
-
-		# To reconcile the issue above, add a numbering system, where each card in the player's hand is suffixed
-		# by the number card it is.  Example, if the players hand contained 15 cards, instead of seeing...
-
-		# Ace of Clubs, Two of Diamonds, Three of Hearts, Four of Spades ...etc
-
-		# ...the player would instead see...
-
-		# Ace of Clubs (1), Two of Diamonds (2), Three of Hearts (3), Four of Spades (4) ...etc
-
-
-
 class CrazyEights
 	def initialize
 		@player = Player.new
