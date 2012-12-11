@@ -165,7 +165,7 @@ class CrazyEights
 			@dealer.hand.each do |card|
 				if check_for_match(@discard_pile, card)
 					puts ""
-					puts "The dealer plays their #{card]}."
+					puts "The dealer plays their #{card}."
 					@discard_pile = @dealer.hand.delete(card)
 
 					intermediary_stage("dealer")
