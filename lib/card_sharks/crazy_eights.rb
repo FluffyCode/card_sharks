@@ -184,6 +184,8 @@ class CrazyEights
 			end
 		end	# end of dealers_turn
 
+		# Starting the game:
+		players_turn
 	end # end of round_of_crazy_eights
 
 end	# end of CrazyEights class
