@@ -1,4 +1,4 @@
-# crazy_eights.rb version 0.1
+# crazy_eights.rb version 1.0
 
 require "card_sharks/deck"
 require "card_sharks/player"
@@ -33,6 +33,27 @@ require "card_sharks/dealer"
 
 	# If a player cannot play a legal card, they must draw from the draw-pile.
 	# If no cards remain in the draw-pile, play continues as normal without drawing.
+
+
+
+	# Possible changes to implement:
+		# Similar to Go Fish game, populate a "side pool" with all cards the dealer could potentially play (if any),
+		# and randomly chose which is selected to be played - adding a bit of randomness to the game.
+
+
+
+		# During one test run, player ran into a "dry streak" - was not able to play any cards, and had to 'pass'
+		# multiple times.  Though this is not an issue (indeed, it is well within the rules of the game), it was 
+		# inconvenient having to count out the number of cards in the player's hand.
+
+		# To reconcile the issue above, add a numbering system, where each card in the player's hand is suffixed
+		# by the number card it is.  Example, if the players hand contained 15 cards, instead of seeing...
+
+		# Ace of Clubs, Two of Diamonds, Three of Hearts, Four of Spades ...etc
+
+		# ...the player would instead see...
+
+		# Ace of Clubs (1), Two of Diamonds (2), Three of Hearts (3), Four of Spades (4) ...etc
 
 
 
