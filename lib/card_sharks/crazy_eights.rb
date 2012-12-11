@@ -36,6 +36,14 @@ require "card_sharks/dealer"
 
 
 
+	# Error to fix:
+		# You play your Nine of Clubs.
+
+		# The dealer plays their Eight of Clubs.
+		# crazy_eights.rb:144:in `intermediary_stage': undefined method `random' for Math:Module (NoMethodError)
+
+
+
 class CrazyEights
 	def initialize
 		@player = Player.new
@@ -71,6 +79,7 @@ class CrazyEights
 			if @user_input.downcase == "pass"
 				if @deck.deck(0) != nil
 					@player.deal(@deck.remove_top_card)
+					puts ""
 					puts "You draw #{@player.hand[-1]} from the draw pile."
 					players_turn
 				else
