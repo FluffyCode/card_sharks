@@ -1,14 +1,16 @@
 class Player
   def initialize
-    @credits = 150
+    @credits = 150  # for Blackjack
     @hand = []
     @score_pool = [] # for Go Fish
   end
 
+  # method implemented for Blackjack
   def credits
     @credits
   end
 
+  # method implemented for Blackjack
   def make_bid
     if @credits == 0
       puts "You are out of credits."
@@ -35,6 +37,23 @@ class Player
     @hand.join(", ")
   end
 
+  # method implemented for Crazy Eights
+  def tell_hand_numbered
+    index_num = 1
+    temp_array = []
+
+    @hand.each do |card|
+      card_rank = card::rank
+      card_suit = card::suit
+
+      temp_array << "#{card_rank} of #{card_suit} (#{index_num})"
+      index_num += 1
+    end
+
+    temp_array.join(", ")
+  end
+
+  # method implemented for Blackjack
   def update_credits(amount)
     @credits += amount
   end
@@ -43,14 +62,17 @@ class Player
     @hand = []
   end
 
+  # method implemented for Go Fish
   def score_pool
     @score_pool
   end
 
+  # method implemented for Go Fish
   def add_to_score_pool(card)
     @score_pool << card
   end
 
+  # method implemented for Go Fish
   def wipe_score_pool
     @score_pool = []
   end
