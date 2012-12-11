@@ -83,7 +83,7 @@ class CrazyEights
 			puts ""
 			puts "The top card on the discard pile is: #{@discard_pile}."
 			puts "What card would you like to play?  Your hand contains:"
-			puts "#{@player.tell_hand}"
+			puts "#{@player.tell_hand_numbered}"
 			puts ""
 			puts "If you can/do not wish to play, type 'pass' to pass."
 
