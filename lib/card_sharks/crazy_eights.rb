@@ -102,9 +102,9 @@ class CrazyEights
 				end
 			end
 
-		end
+		end	# end of players_turn
 
-		# Intermediary stage - check for the play of 8's here
+		# Intermediary stage - check for game overs, & the play of 8's here
 		def intermediary_stage(player)
 			is_an_eight = true if @discard_pile::rank == "Eight"
 			player_card_count = @player.hand.length
@@ -115,6 +115,7 @@ class CrazyEights
 				puts "You were the first to clear all cards from your hand - you win!"
 				exit 0
 			elsif dealer_card_count == 0
+				puts ""
 				puts "The dealer was first to clear their hand of all cards and won this game."
 				exit 0
 			end
@@ -161,8 +162,8 @@ class CrazyEights
 
 		# Dealers turn
 		def dealers_turn
-			@dealer.hand.each do |card|	# go through each card in the dealer's hand in turn...
-				if check_for_match(@discard_pile, card)	# ...and if it can be played, the dealer does so
+			@dealer.hand.each do |card|
+				if check_for_match(@discard_pile, card)
 					puts ""
 					puts "The dealer plays their #{card]}."
 					@discard_pile = @dealer.hand.delete(card)
@@ -171,7 +172,6 @@ class CrazyEights
 				end
 			end	# end of each-do
 
-			# if a card has not been played by this point:
 			if @deck.deck(0) != nil
 				@dealer.deal(@deck.remove_top_card)
 				puts ""
@@ -182,12 +182,8 @@ class CrazyEights
 				puts "The dealer was unable to play a card."
 				players_turn
 			end
-
 		end	# end of dealers_turn
 
-
-
-		players_turn
 	end # end of round_of_crazy_eights
 
 end	# end of CrazyEights class
