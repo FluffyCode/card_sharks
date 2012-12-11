@@ -36,34 +36,6 @@ require "card_sharks/dealer"
 
 
 
-	# Error to fix:
-		# You play your Nine of Clubs.
-
-		# The dealer plays their Eight of Clubs.
-		# crazy_eights.rb:144:in `intermediary_stage': undefined method `random' for Math:Module (NoMethodError)
-
-	# after changing random to rand:
-		# The top card on the discard pile is: King of Clubs.
-		# What card would you like to play?  Your hand contains:
-		# Ten of Hearts, Three of Spades, Eight of Spades, Six of Clubs, King of Hearts, Queen of Hearts, Seven of Diamonds
-
-		# If you can/do not wish to play, type 'pass' to pass.
-		# 3
-
-		# You play your Eight of Spades.
-
-		# You played an Eight - nominate a new rank: Clubs, Diamonds, Hearts or Spades.
-		# Hearts
-
-		# You chose to change the playable suit to: Hearts.
-
-		# The top card on the discard pile is: Eight of Hearts.
-
-		# The dealer plays their Eight of Diamonds.
-		# crazy_eights.rb:153:in `intermediary_stage': private method `rand' called for Math:Module (NoMethodError)
-
-
-
 class CrazyEights
 	def initialize
 		@player = Player.new
@@ -170,13 +142,12 @@ class CrazyEights
 					end
 
 				elsif player == "dealer"
-					random_num = Math.floor(Math.rand(@dealer.hand.length))
+					random_num = rand(@dealer.hand.length)
 
 					@discard_pile::suit = @dealer.hand[random_num]::suit
 
 					puts ""
 					puts "The dealer played an Eight, and decided to change the suit to #{@dealer.hand[random_num]::suit}."
-					puts ""
 
 					players_turn
 				end
