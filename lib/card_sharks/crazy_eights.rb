@@ -107,6 +107,17 @@ class CrazyEights
 		# Intermediary stage - check for the play of 8's here
 		def intermediary_stage(player)
 			is_an_eight = true if @discard_pile::rank == "Eight"
+			player_card_count = @player.hand.length
+			dealer_card_count = @dealer.hand.length
+
+			if player_card_count == 0
+				puts ""
+				puts "You were the first to clear all cards from your hand - you win!"
+				exit 0
+			elsif dealer_card_count == 0
+				puts "The dealer was first to clear their hand of all cards and won this game."
+				exit 0
+			end
 
 			if is_an_eight
 				if player == "player"
