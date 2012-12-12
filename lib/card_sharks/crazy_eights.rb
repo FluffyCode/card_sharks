@@ -1,4 +1,4 @@
-# crazy_eights.rb version 2.1
+# crazy_eights.rb version 2.2
 
 require "card_sharks/deck"
 require "card_sharks/player"
