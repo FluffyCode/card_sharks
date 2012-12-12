@@ -168,15 +168,24 @@ class CrazyEights
 
 		# Dealers turn
 		def dealers_turn
+			can_play_these = []
+
 			@dealer.hand.each do |card|
 				if check_for_match(@discard_pile, card)
-					puts ""
-					puts "The dealer plays their #{card}."
-					@discard_pile = @dealer.hand.delete(card)
-
-					intermediary_stage("dealer")
+					can_play_these << card
 				end
-			end	# end of each-do
+			end
+
+			if can_play_these.length < 0
+				random_num = rand(can_play_these.length)
+				chosen_card = can_play_these[random_num]
+
+				puts ""
+				puts "The dealer plays their #{chosen_card}."
+				@discard_pile = @dealer.hand.delete(chosen_card)
+
+				intermediary_stage("dealer")
+			end
 
 			if @deck.deck(0) != nil
 				@dealer.deal(@deck.remove_top_card)
