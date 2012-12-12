@@ -1,4 +1,4 @@
-# crazy_eights.rb version 1.5
+# crazy_eights.rb version 2.0
 
 require "card_sharks/deck"
 require "card_sharks/player"
@@ -33,12 +33,6 @@ require "card_sharks/dealer"
 
 	# If a player cannot play a legal card, they must draw from the draw-pile.
 	# If no cards remain in the draw-pile, play continues as normal without drawing.
-
-
-
-	# Possible changes to implement:
-		# Similar to Go Fish game, populate a "side pool" with all cards the dealer could potentially play (if any),
-		# and randomly chose which is selected to be played - adding a bit of randomness to the game.
 
 
 
