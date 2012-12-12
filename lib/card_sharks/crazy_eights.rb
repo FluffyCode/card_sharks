@@ -52,8 +52,8 @@ class CrazyEights
 		# Next card taken from the deck becomes the start of the discard pile
 		@discard_pile = @deck.remove_top_card
 
-		def check_for_match(discard_pile, card_being_played)
-			if card_being_played::rank == discard_pile::rank || card_being_played::suit == discard_pile::suit || card_being_played::rank == "Eight"
+		def check_for_match(card_being_played)
+			if card_being_played::rank == @discard_pile::rank || card_being_played::suit == @discard_pile::suit || card_being_played::rank == "Eight"
 				true
 			end
 		end
@@ -84,7 +84,7 @@ class CrazyEights
 				if @user_input > 0 && @user_input < @player.hand.length + 1
 					@user_input -= 1
 
-					if check_for_match(@discard_pile, @player.hand[@user_input])
+					if check_for_match(@player.hand[@user_input])
 						puts ""
 						puts "You play your #{@player.hand[@user_input]}."
 						@discard_pile = @player.hand.delete_at(@user_input)
@@ -165,7 +165,7 @@ class CrazyEights
 			can_play_these = []
 
 			@dealer.hand.each do |card|
-				if check_for_match(@discard_pile, card)
+				if check_for_match(card)
 					can_play_these << card
 				end
 			end
