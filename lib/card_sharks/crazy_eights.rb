@@ -176,7 +176,7 @@ class CrazyEights
 				end
 			end
 
-			if can_play_these.length < 0
+			if can_play_these.length > 0
 				random_num = rand(can_play_these.length)
 				chosen_card = can_play_these[random_num]
 
@@ -185,17 +185,17 @@ class CrazyEights
 				@discard_pile = @dealer.hand.delete(chosen_card)
 
 				intermediary_stage("dealer")
-			end
-
-			if @deck.deck(0) != nil
-				@dealer.deal(@deck.remove_top_card)
-				puts ""
-				puts "The dealer was unable to play a card, and draws from the draw pile."
-				dealers_turn
 			else
-				puts ""
-				puts "The dealer was unable to play a card."
-				players_turn
+				if @deck.deck(0) != nil
+					@dealer.deal(@deck.remove_top_card)
+					puts ""
+					puts "The dealer was unable to play a card, and draws from the draw pile."
+					dealers_turn
+				else
+					puts ""
+					puts "The dealer was unable to play a card."
+					players_turn
+				end	
 			end
 		end	# end of dealers_turn
 
