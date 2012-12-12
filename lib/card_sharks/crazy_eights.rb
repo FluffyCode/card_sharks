@@ -171,8 +171,7 @@ class CrazyEights
 			end
 
 			if can_play_these.length > 0
-				random_num = rand(can_play_these.length)
-				chosen_card = can_play_these[random_num]
+				chosen_card = can_play_these[rand(can_play_these.length)]
 
 				puts ""
 				puts "The dealer plays their #{chosen_card}."
