@@ -36,6 +36,38 @@ require "card_sharks/dealer"
 
 
 
+# Changes to implement:
+	# When players are unable to make a play, and when/if the @deck is empty, players do not draw a card (as
+	# there are no cards to draw), and it changes to the other player's turn.
+
+	# However, what if neither player is capable of making a legal play?  They are deadlocked and unable to
+	# finish the game.
+
+	# Create a sort of "contingency code" - if neither player can make a legal play, and the deck is empty,
+	# take the discard pile -> shuffle it -> set it all "face down" as the new @deck.  Then, take the top card
+	# (or, perhaps the last on the top of the @discard_pile before it got shuffled and became the new @deck)
+	# and set it as the new "card suit/rank" to be matched in the new @discard_pile.
+
+
+
+	# As is now, when eights are played, the player/dealer nominate a new suit - this works fine.
+	
+	# However, this straight-up changes the suit of the eight.  Not game-breaking, but it sure as heck
+	# would look weird if anyone were to notice that there are [, for example, ] up to four "Eight of Spades."
+
+	# Instead of changing the suit of the Eight, create an instance variable used across the program that tracks
+	# the current playable suit.
+
+	# Possible alternative (given the above, running-out-of-cards/deadlock situation detailed above), when
+	# @deck runs out of cards, and no-one can make a legal play, create @deck anew (@deck = Deck.new) -> create
+	# a temoporary variable (array) containing a copy of all cards in the player's/dealer's hand -> for each of
+	# those cards, delete them out of the new @deck, then shuffle the new @deck and continue play from there.
+
+	# This way, who gives a flying-purple-hippopotamus-with-green-wings if the suits of the Eights gets
+	# overwritten - they'll never be seen again, anyway.
+
+
+
 class CrazyEights
 	def initialize
 		@player = Player.new
