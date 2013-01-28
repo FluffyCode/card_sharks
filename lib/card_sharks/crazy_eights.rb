@@ -76,7 +76,7 @@ class CrazyEights
 
 	def round_of_crazy_eights
 		@deck = Deck.new
-		@deck.shuffle!
+		5.times { @deck.shuffle! }
 
 		7.times { @player.deal(@deck.remove_top_card) }
 		7.times { @dealer.deal(@deck.remove_top_card) }
@@ -221,6 +221,43 @@ class CrazyEights
 				end	
 			end
 		end	# end of dealers_turn
+
+		def replace_deck(player)
+			puts ""
+			puts "The draw pile is empty, and no plays can be made."
+			puts ""
+
+			# Keep track of all cards in the player's hands
+			@cards_to_discard = []
+
+			@player.hand.each do |card|
+				@cards_to_discard << card
+			end
+
+			@dealer.hand.each do |card|
+				@cards_to_discard << card
+			end
+
+			# Create a new deck
+			@deck = Deck.new
+
+			# Wipe all cards in the player's hands from the new deck
+			until @deck.length == (52 - @cards_to_discard.length)
+				@deck.self.each do |card_a|
+					@cards_to_discard.each do |card_b|
+						@deck.delete(card_a) if card_a == card_b
+					end
+				end
+			end
+
+			# Shuffle the new deck
+			5.times { @deck.shuffle! }
+
+			# The first card drawn from the new deck is now the top card on the discard pile
+			@discard_pile = @deck.remove_top_card
+
+			intermediary_stage(player)
+		end
 
 		# Starting the game:
 		players_turn

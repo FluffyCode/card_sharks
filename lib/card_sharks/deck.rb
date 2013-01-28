@@ -1,42 +1,50 @@
 require "card_sharks/card"
 
 class Deck
-  SIZE = 52
+	SIZE = 52
 
-  def initialize 
-    @deck = []
+	def initialize 
+		@deck = []
 
-    SIZE.times do |i|
-      rank = Card.ranks[i % 13]
-      suit = Card.suits[i % 4]
+		SIZE.times do |i|
+			rank = Card.ranks[i % 13]
+			suit = Card.suits[i % 4]
 
-      @deck << Card.new(suit, rank)
-    end
-  end
+			@deck << Card.new(suit, rank)
+		end
+	end
 
-  def deck(x)
-    @deck[x]
-  end
+	def self
+		@deck
+	end
 
-  def tell_deck
-    @deck.join(", ")
-  end
+	def delete(x)
+		@deck.delete(x)
+	end
 
-  def sort!
-    @deck.sort_by do |card|
-      card.suit
-    end
-  end
+	def deck(x)
+		@deck[x]
+	end
 
-  def shuffle!
-    @deck.shuffle!
-  end
+	def tell_deck
+		@deck.join(", ")
+	end
 
-  def remove_top_card
-    @deck.delete_at(0)
-  end
+	def sort!
+		@deck.sort_by do |card|
+			card.suit
+		end
+	end
 
-  def length
-    @deck.length
-  end
+	def shuffle!
+		@deck.shuffle!
+	end
+
+	def remove_top_card
+		@deck.delete_at(0)
+	end
+
+	def length
+		@deck.length
+	end
 end
