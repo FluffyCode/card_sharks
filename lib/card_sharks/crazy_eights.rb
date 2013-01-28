@@ -107,6 +107,7 @@ class CrazyEights
 					puts "You draw #{@player.hand[-1]} from the draw pile."
 					players_turn
 				else
+					time_to_reshuffle_deck("dealer")
 					dealers_turn
 				end
 
@@ -137,8 +138,35 @@ class CrazyEights
 
 		end	# end of players_turn
 
+		# Determine if conditions are appropriate for deck reshuffling
+		def time_to_reshuffle_deck(player)
+			time_to_reshuffle = false
+
+			if @deck.length == 0
+				@player.hand.each do |card|
+					if check_for_match(card)
+					else
+						time_to_reshuffle = true
+					end
+				end
+
+				@dealer.hand.each do |card|
+					if check_for_match(card)
+					else
+						time_to_reshuffle = true
+					end
+				end
+			end
+
+			if time_to_reshuffle
+				replace_deck(player)
+			end
+		end
+
 		# Intermediary stage - check for game overs, & the play of 8's here
 		def intermediary_stage(player)
+			time_to_reshuffle_deck(player)
+
 			is_an_eight = true if @discard_pile::rank == "Eight"
 
 			if @player.hand.length == 0
@@ -217,6 +245,7 @@ class CrazyEights
 				else
 					puts ""
 					puts "The dealer was unable to play a card."
+					time_to_reshuffle_deck("player")
 					players_turn
 				end	
 			end
@@ -226,7 +255,6 @@ class CrazyEights
 		def replace_deck(player)
 			puts ""
 			puts "The draw pile is empty, and no plays can be made."
-			puts ""
 
 			@cards_to_discard = []
 
@@ -251,6 +279,8 @@ class CrazyEights
 			5.times { @deck.shuffle! }
 
 			@discard_pile = @deck.remove_top_card
+
+			puts "The discard pile has been reshuffled into the draw pile."
 
 			intermediary_stage(player)
 		end
