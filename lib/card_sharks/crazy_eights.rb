@@ -222,12 +222,12 @@ class CrazyEights
 			end
 		end	# end of dealers_turn
 
+		# Deck reshuffling (in case no legal plays can be made && draw pile is empty)
 		def replace_deck(player)
 			puts ""
 			puts "The draw pile is empty, and no plays can be made."
 			puts ""
 
-			# Keep track of all cards in the player's hands
 			@cards_to_discard = []
 
 			@player.hand.each do |card|
@@ -238,10 +238,8 @@ class CrazyEights
 				@cards_to_discard << card
 			end
 
-			# Create a new deck
 			@deck = Deck.new
 
-			# Wipe all cards in the player's hands from the new deck
 			until @deck.length == (52 - @cards_to_discard.length)
 				@deck.self.each do |card_a|
 					@cards_to_discard.each do |card_b|
@@ -250,10 +248,8 @@ class CrazyEights
 				end
 			end
 
-			# Shuffle the new deck
 			5.times { @deck.shuffle! }
 
-			# The first card drawn from the new deck is now the top card on the discard pile
 			@discard_pile = @deck.remove_top_card
 
 			intermediary_stage(player)
@@ -266,9 +262,4 @@ class CrazyEights
 end	# end of CrazyEights class
 
 CrazyEights.new.round_of_crazy_eights
-
-# Current issue:
-	# somewhere in the intermediary_stage method, lines 115/116, the code is not taking "clubs", "diamonds",
-	# "hearts" or "spades" - it deems everything an invalid input (even invalid input - but that's a good thing)
-	# Tl;dr, infinite loops.  Figure it out, fix it.
 	
