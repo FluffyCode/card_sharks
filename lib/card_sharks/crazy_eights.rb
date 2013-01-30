@@ -69,14 +69,14 @@ class CrazyEights
 			@user_input = gets.chomp
 
 			if @user_input.downcase == "pass"
-				if @deck.deck(0) != nil
+				if @deck.length == 0
+					time_to_reshuffle_deck("dealer")
+					dealers_turn
+				else
 					@player.deal(@deck.remove_top_card)
 					puts ""
 					puts "You draw #{@player.hand[-1]} from the draw pile."
 					players_turn
-				else
-					time_to_reshuffle_deck("dealer")
-					dealers_turn
 				end
 
 			else
@@ -110,19 +110,17 @@ class CrazyEights
 		def time_to_reshuffle_deck(player)
 			time_to_reshuffle = false
 
-			if @deck.length == 0
-				@player.hand.each do |card|
-					if check_for_match(card)
-					else
-						time_to_reshuffle = true
-					end
+			@player.hand.each do |card|
+				if check_for_match(card)
+				else
+					time_to_reshuffle = true
 				end
+			end
 
-				@dealer.hand.each do |card|
-					if check_for_match(card)
-					else
-						time_to_reshuffle = true
-					end
+			@dealer.hand.each do |card|
+				if check_for_match(card)
+				else
+					time_to_reshuffle = true
 				end
 			end
 
@@ -215,11 +213,6 @@ class CrazyEights
 			end
 		end	# end of dealers_turn
 
-		def go_to_player_turn(player)
-			players_turn if (player == "player")
-			dealers_turn if (player == "dealer")
-		end
-
 		def invert_player_turn(player)
 			players_turn if (player == "dealer")
 			dealers_turn if (player == "player")
@@ -256,7 +249,7 @@ class CrazyEights
 
 			puts "The discard pile has been reshuffled into the draw pile."
 
-			go_to_player_turn(player)
+			invert_player_turn(player)
 		end
 
 		# Starting the game:
