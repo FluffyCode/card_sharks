@@ -215,6 +215,11 @@ class CrazyEights
 			end
 		end	# end of dealers_turn
 
+		def go_to_player_turn(player)
+			players_turn if (player == "player")
+			dealers_turn if (player == "dealer")
+		end
+
 		def invert_player_turn(player)
 			players_turn if (player == "dealer")
 			dealers_turn if (player == "player")
@@ -251,7 +256,7 @@ class CrazyEights
 
 			puts "The discard pile has been reshuffled into the draw pile."
 
-			invert_player_turn(player)
+			go_to_player_turn(player)
 		end
 
 		# Starting the game:
