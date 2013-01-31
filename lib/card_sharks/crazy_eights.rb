@@ -36,33 +36,6 @@ require "card_sharks/dealer"
 
 
 
-	# Notes on current thing to fix:
-		# The top card on the discard pile is: Queen of Hearts.
-		# What card would you like to play?  Your hand contains:
-		# Ace of Diamonds (1), King of Diamonds (2), Queen of Clubs (3), Ten of Clubs (4), Queen of Diamonds (5), Three of Clubs (6)
-
-		# If you can/do not wish to play, type 'pass' to pass.
-		# 5
-
-		# You play your Queen of Diamonds.
-
-		# The dealer was unable to play a card, and draws from the draw pile.
-
-		# The dealer was unable to play a card.
-
-		# The draw pile is empty, and no plays can be made.
-		# The discard pile has been reshuffled into the draw pile.
-
-		# The dealer plays their Three of Hearts.
-
-		# The top card on the discard pile is: Three of Hearts.
-		# What card would you like to play?  Your hand contains:
-		# Ace of Diamonds (1), King of Diamonds (2), Queen of Clubs (3), Ten of Clubs (4), Three of Clubs (5)
-
-	# The draw pile should not be reshuffled if someone can still make a play (lines 42, 47, 53).
-
-
-
 class CrazyEights
 	def initialize
 		@player = Player.new
@@ -135,23 +108,22 @@ class CrazyEights
 
 		# Determine if conditions are appropriate for deck reshuffling
 		def time_to_reshuffle_deck(player)
-			time_to_reshuffle = false
+			player_can_make_play = false
+			dealer_can_make_play = false
 
 			@player.hand.each do |card|
 				if check_for_match(card)
-				else
-					time_to_reshuffle = true
+					player_can_make_play = true
 				end
 			end
 
 			@dealer.hand.each do |card|
 				if check_for_match(card)
-				else
-					time_to_reshuffle = true
+					dealer_can_make_play = true
 				end
 			end
 
-			if time_to_reshuffle
+			if (player_can_make_play == false) && (dealer_can_make_play == false)
 				replace_deck(player)
 			end
 		end
