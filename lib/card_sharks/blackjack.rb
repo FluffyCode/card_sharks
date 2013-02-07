@@ -6,6 +6,8 @@ require "card_sharks/dealer"
 require "card_sharks/blackjack_value.rb"
 
 # Notes on progress / current problems:
+	# Rework hit_or_stay loop - currently, only "stay" is recognized.  If a player inputs anything other than "stay",
+	# it is considered a hit - problem, even if "stay" is intended, but mistyped.
 
 
 
