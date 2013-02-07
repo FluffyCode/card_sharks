@@ -1,4 +1,4 @@
-# blackjack.rb version 3.3
+# blackjack.rb version 3.4
 
 require "card_sharks/deck"
 require "card_sharks/player"
@@ -6,8 +6,6 @@ require "card_sharks/dealer"
 require "card_sharks/blackjack_value.rb"
 
 # Notes on progress / current problems:
-	# Rework hit_or_stay loop - currently, only "stay" is recognized.  If a player inputs anything other than "stay",
-	# it is considered a hit - problem, even if "stay" is intended, but mistyped.
 
 
 
@@ -39,23 +37,31 @@ class Blackjack
 
 		def hit_or_stay
 			puts "Hit or stay?"
-			until gets.chomp.downcase == "stay"
+			user_input = gets.chomp.downcase
+
+			if user_input == "hit"
 				@player.deal(@deck.remove_top_card)
 				puts "Your hand contains #{@player.tell_hand}."
 
 				if evaluate_hand_score(@player.hand) == 21
 					# Break player out of until-loop when they hit towards 21
 					puts "Your hand's score is 21."
-					break
 				elsif
 					if evaluate_hand_score(@player.hand) > 21
 						puts "You busted with #{evaluate_hand_score(@player.hand)}."
 						end_round("lose")
 					end
 				else
-					puts "Hit or stay?"
+					hit_or_stay
 				end
+
+			elsif user_input == "stay"
+				# Do nothing - move on in the program
+			else
+				puts "Was expecting 'hit' or 'stay'"
+				hit_or_stay
 			end
+
 		end
 
 	  def evaluate_hand_score(hand)
