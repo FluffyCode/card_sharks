@@ -38,22 +38,33 @@ class Blackjack
 		puts "The dealer has been dealt two cards, and is showing #{@dealer.hand[1]}."
 
 		def hit_or_stay
-			puts "Hit or stay?"
-			until gets.chomp.downcase == "stay"
-				@player.deal(@deck.remove_top_card)
-				puts "Your hand contains #{@player.tell_hand}."
+			def declare_hit_or_stay
+				puts "Hit or stay?"
+			end
+			
+			declare_hit_or_stay
+			user_input = gets.chomp.downcase
 
-				if evaluate_hand_score(@player.hand) == 21
-					# Break player out of until-loop when they hit towards 21
-					puts "Your hand's score is 21."
-					break
-				elsif
-					if evaluate_hand_score(@player.hand) > 21
+			until user_input == "stay"
+				if user_input == "hit"
+					@player.deal(@deck.remove_top_card)
+					puts "Your hand contains #{@player.tell_hand}."
+
+					if evaluate_hand_score(@player.hand) == 21
+						# Break player out of until-loop when they hit towards 21
+						puts "Your hand's score is 21."
+						break
+					elsif evaluate_hand_score(@player.hand) > 21
 						puts "You busted with #{evaluate_hand_score(@player.hand)}."
 						end_round("lose")
 					end
+
+					declare_hit_or_stay
+					user_input = gets.chomp.downcase
+				
 				else
-					puts "Hit or stay?"
+					puts "Input error: was expecting 'hit' or 'stay'"
+					user_input = gets.chomp.downcase
 				end
 			end
 		end
@@ -155,7 +166,7 @@ def play_a_game(x)
 		puts "Alrighty then, another time!"
 		exit 0
 	else
-		"Was expecting y/n."
+		puts "Input error: was expecting y/n"
 		play_a_game(x)
 	end
 end
