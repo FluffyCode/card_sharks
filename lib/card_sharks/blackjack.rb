@@ -1,4 +1,4 @@
-# blackjack.rb version 3.2
+# blackjack.rb version 3.3
 
 require "card_sharks/deck"
 require "card_sharks/player"
@@ -6,58 +6,8 @@ require "card_sharks/dealer"
 require "card_sharks/blackjack_value.rb"
 
 # Notes on progress / current problems:
-	# Here's an interesting one:
-		# Would you like to play a round of blackjack?
-		# yes
-		# How many of your 150 credits would you like to wager?
-		# 1
-		# You have been dealt: Seven of Spades, Four of Clubs.
-		# The dealer has been dealt two cards, and is showing Two of Diamonds.
-		# Hit or stay?
-		# hit
-		# Your hand contains Seven of Spades, Four of Clubs, Eight of Diamonds.
-		# Hit or stay?
-		# hit
-		# Your hand contains Seven of Spades, Four of Clubs, Eight of Diamonds, Six of Hearts.
-		# You busted with 25.
-		# This round, the dealer's hand contained: King of Clubs, Two of Diamonds.
-		# Would you like to play a round of blackjack?
-		# yes
-		# How many of your 149 credits would you like to wager?
-		# 1
-		# You have been dealt: Queen of Hearts, Three of Hearts.
-		# The dealer has been dealt two cards, and is showing Four of Clubs.
-		# Hit or stay?
-		# hit
-		# Your hand contains Queen of Hearts, Three of Hearts, Nine of Diamonds.
-		# You busted with 22.
-		# This round, the dealer's hand contained: Jack of Spades, Four of Clubs.
-		# Would you like to play a round of blackjack?
-		# hit
-		# Alrighty then, another time!
-		# Hit or stay?
-		# hit
-		# Your hand contains Queen of Hearts, Three of Hearts, Nine of Diamonds, Ten of Clubs.
-		# You busted with 32.
-		# This round, the dealer's hand contained: Jack of Spades, Four of Clubs.
-		# Would you like to play a round of blackjack?
-		# hit
-		# Alrighty then, another time!
-		# Hit or stay?
-		# hit
-		# Your hand contains Queen of Hearts, Three of Hearts, Nine of Diamonds, Ten of Clubs, Seven of Hearts.
-		# You busted with 39.
-		# This round, the dealer's hand contained: Jack of Spades, Four of Clubs.
-		# Would you like to play a round of blackjack?
-		# hit
-		# Alrighty then, another time!
-		# Hit or stay?
-		# hit
-		# Your hand contains Queen of Hearts, Three of Hearts, Nine of Diamonds, Ten of Clubs, Seven of Hearts, Four of Spades.
-		# You busted with 43.
-		# This round, the dealer's hand contained: Jack of Spades, Four of Clubs.
-		# Would you like to play a round of blackjack?
-		# yes
+
+
 
 class Blackjack
 	def initialize
@@ -190,15 +140,21 @@ class Blackjack
 end
 
 def play_a_game(x)
-	puts "Would you like to play a round of blackjack?"
-	if gets.chomp.downcase == "yes"
+	puts "Would you like to play a round of blackjack? (y/n)"
+	user_input = gets.chomp.downcase
+
+	if user_input == "y"
 		if x == 1
 			Blackjack.new.round_of_blackjack
 		else
 			round_of_blackjack
 		end
-	else 
+	elsif user_input == "n"
 		puts "Alrighty then, another time!"
+		exit 0
+	else
+		"Was expecting y/n."
+		play_a_game(x)
 	end
 end
 
