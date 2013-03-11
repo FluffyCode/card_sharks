@@ -44,6 +44,10 @@ class Deck
 		@deck.delete_at(0)
 	end
 
+	def add_card_to_deck(card)
+		@deck << card
+	end
+
 	def length
 		@deck.length
 	end
