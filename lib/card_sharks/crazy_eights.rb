@@ -62,10 +62,18 @@ class CrazyEights
 		def get_info
 			update_playable_suit
 
+			def determine_plural(value)
+				if value == 1
+					return "#{value} card"
+				else
+					return "#{value} cards"
+				end
+			end
+
 			puts
-			puts "You have #{@player.hand.size} cards in your hand, and the dealer has #{@dealer.hand.size} cards."
+			puts "You have #{determine_plural(@player.hand.size)} in your hand, and the dealer has #{determine_plural(@dealer.hand.size)}."
 			puts "The current playable rank is #{@discard_pile[-1]::rank}, and the current playable suit is #{@playable_suit}."
-			puts "There are #{@deck.length} cards in the draw pile, and #{@discard_pile.length} cards in the discard pile."
+			puts "There are #{determine_plural(@deck.length)} in the draw pile, and #{determine_plural(@discard_pile.length)} in the discard pile."
 
 			players_turn
 		end
