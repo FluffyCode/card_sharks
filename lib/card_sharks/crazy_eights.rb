@@ -1,4 +1,4 @@
-# crazy_eights.rb version 2.3
+# crazy_eights.rb version 2.4
 
 require "card_sharks/deck"
 require "card_sharks/player"
@@ -40,6 +40,9 @@ class CrazyEights
 	def initialize
 		@player = Player.new
 		@dealer = Dealer.new
+
+		# For keeping track of the playable suit:
+		@playable_suit = nil
 	end
 
 	def round_of_crazy_eights
@@ -50,17 +53,22 @@ class CrazyEights
 		7.times { @dealer.deal(@deck.remove_top_card) }
 
 		# Next card taken from the deck becomes the start of the discard pile
-		@discard_pile = @deck.remove_top_card
+		@discard_pile = Array.new << @deck.remove_top_card
+
+		def update_playable_suit
+			@playable_suit = @discard_pile[-1]::suit
+		end
 
 		def check_for_match(card_being_played)
-			if card_being_played::rank == @discard_pile::rank || card_being_played::suit == @discard_pile::suit || card_being_played::rank == "Eight"
+			if card_being_played::rank == @discard_pile[-1]::rank || card_being_played::suit == @playable_suit || card_being_played::rank == "Eight"
 				true
 			end
 		end
 
 		def players_turn
 			puts ""
-			puts "The top card on the discard pile is: #{@discard_pile}."
+			puts "The top card on the discard pile is: #{@discard_pile[-1]}."
+			pust "The currently playable suit is: #{@playable_suit}." if @playable_suit != @discard_pile[-1]::suit
 			puts "What card would you like to play?  Your hand contains:"
 			puts "#{@player.tell_hand_numbered}"
 			puts ""
@@ -88,7 +96,7 @@ class CrazyEights
 					if check_for_match(@player.hand[@user_input])
 						puts ""
 						puts "You play your #{@player.hand[@user_input]}."
-						@discard_pile = @player.hand.delete_at(@user_input)
+						@discard_pile << @player.hand.delete_at(@user_input)
 
 						intermediary_stage("player")			
 					else
@@ -130,7 +138,9 @@ class CrazyEights
 
 		# Intermediary stage - check for game overs, & the play of 8's here
 		def intermediary_stage(player)
-			is_an_eight = true if @discard_pile::rank == "Eight"
+			update_playable_suit
+
+			is_an_eight = true if @discard_pile[-1]::rank == "Eight"
 
 			if @player.hand.length == 0
 				puts ""
@@ -149,11 +159,11 @@ class CrazyEights
 
 					@new_suit = gets.chomp.downcase.capitalize!
 					if @new_suit == "Clubs" || @new_suit == "Diamonds" || @new_suit == "Hearts" || @new_suit == "Spades"
-						@discard_pile::suit = @new_suit
+						@playable_suit = @new_suit
 						puts ""
 						puts "You chose to change the playable suit to: #{@new_suit}."
 						puts ""
-						puts "The top card on the discard pile is: #{@discard_pile}."
+						puts "The top card on the discard pile is: #{@discard_pile[-1]}."
 
 						dealers_turn
 					else
@@ -165,7 +175,7 @@ class CrazyEights
 				elsif player == "dealer"
 					random_num = rand(@dealer.hand.length)
 
-					@discard_pile::suit = @dealer.hand[random_num]::suit
+					@playable_suit = @dealer.hand[random_num]::suit
 
 					puts ""
 					puts "The dealer played an Eight, and decided to change the suit to #{@dealer.hand[random_num]::suit}."
@@ -192,7 +202,7 @@ class CrazyEights
 
 				puts ""
 				puts "The dealer plays their #{chosen_card}."
-				@discard_pile = @dealer.hand.delete(chosen_card)
+				@discard_pile << @dealer.hand.delete(chosen_card)
 
 				intermediary_stage("dealer")
 			else
@@ -220,29 +230,17 @@ class CrazyEights
 			puts ""
 			puts "The draw pile is empty, and no plays can be made."
 
-			@cards_to_discard = []
-
-			@player.hand.each do |card|
-				@cards_to_discard << card
+			# Take all the cards from the discard pile, and put them back into the deck
+			until @discard_pile.size == 0
+				@deck.add_card_to_deck(@discard_pile.delete_at(-1))
 			end
 
-			@dealer.hand.each do |card|
-				@cards_to_discard << card
-			end
-
-			@deck = Deck.new
-
-			until @deck.length == (52 - @cards_to_discard.length)
-				@deck.self.each do |card_a|
-					@cards_to_discard.each do |card_b|
-						@deck.delete(card_a) if card_a == card_b
-					end
-				end
-			end
-
+			# Shuffle the deck
 			5.times { @deck.shuffle! }
 
-			@discard_pile = @deck.remove_top_card
+			# Place a card from the reshuffled deck onto the discard pile
+			@discard_pile << @deck.remove_top_card
+			update_playable_suit
 
 			puts "The discard pile has been reshuffled into the draw pile."
 
@@ -250,6 +248,7 @@ class CrazyEights
 		end
 
 		# Starting the game:
+		update_playable_suit
 		players_turn
 	end # end of round_of_crazy_eights
 
