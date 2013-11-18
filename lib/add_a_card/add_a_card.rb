@@ -41,7 +41,7 @@ class AddACard
   end
 
   def evaluate_this_round(cards)
-    this_result = (AddACardValue.new(cards)).value
+    AddACardValue.new(cards).value
   end
 
   def round_of_add_a_card
@@ -58,7 +58,7 @@ class AddACard
         Timeout::timeout(@countdown_timer) {
           user_num = gets.chomp.to_i
 
-          @num_correct += 1 if (user_num == evaluate_this_round(this_round_of_cards))
+          @num_correct += 1 if user_num == evaluate_this_round(this_round_of_cards)
         }
       rescue
       end

@@ -10,7 +10,7 @@ class AddACardValue
   end
 
   def value
-    this_rounds_value = @cards.reduce(0) do |sum_of_values, card|
+    @cards.reduce(0) do |sum_of_values, card|
       sum_of_values + values[card.rank]
     end
   end
