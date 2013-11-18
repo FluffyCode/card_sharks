@@ -1,13 +1,13 @@
-## CardSharks ##
+# CardSharks #
 Card Sharks is a small collection of card-based games.
 
-# Primary Games #
+### Primary Games ###
 Presently included primary games are:
 * Blackjack
 * Go Fish
 * Crazy Eights
 
-# Minigames #
+### Minigames ###
 Also included is a 'minigame' of sorts:
 * Add a Card
 
