@@ -1,6 +1,6 @@
-require "card_sharks/card"
-require "card_sharks/blackjack_value"
-require "card_sharks/deck"
+require_relative "../lib/master/card"
+require_relative "../lib/blackjack/blackjack_value"
+require_relative "../lib/master/deck"
 
 describe BlackjackValue do
   let(:hand) { [] }
