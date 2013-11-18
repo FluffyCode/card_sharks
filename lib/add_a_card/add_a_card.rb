@@ -19,6 +19,7 @@ class AddACard
     @deck.shuffle!
 
     @num_correct = 0
+    @score = 0
 
     @eval = AddACardValue.new
 
@@ -47,6 +48,7 @@ class AddACard
       cards_this_round = []
       2.times { cards_this_round << @deck.remove_top_card }
       @eval.cards(cards_this_round)
+      value = @eval.value
 
       puts ""
       puts "What is the sum of:"
@@ -56,7 +58,10 @@ class AddACard
         Timeout::timeout(@countdown_timer) {
           user_num = gets.chomp.to_i
 
-          @num_correct += 1 if user_num == @eval.value
+          if user_num == value
+            @num_correct += 1
+            @score += value
+          end
         }
       rescue
       end
@@ -64,6 +69,7 @@ class AddACard
 
     puts ""
     puts "Out of 26 rounds, you got #{@num_correct} correct."
+    puts "Your total score is: #{@score} / 376."
   end # end round_of_add_a_card
 
 end
