@@ -13,7 +13,7 @@ require "timeout"
 
 
 
-class Add_A_Card
+class AddACard
 	def strip_suit(card)
 		card.to_s.gsub(/( of Clubs)/, "").gsub(/( of Diamonds)/, "").gsub(/( of Hearts)/, "").gsub(/( of Spades)/, "")
 	end
@@ -78,4 +78,4 @@ class Add_A_Card
 
 end
 
-Add_A_Card.new.round_of_add_a_card
+AddACard.new.round_of_add_a_card
