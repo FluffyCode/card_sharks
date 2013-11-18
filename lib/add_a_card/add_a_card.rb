@@ -18,9 +18,11 @@ class AddACard
     @deck = Deck.new
     @deck.shuffle!
 
-    @countdown_timer = 1 + set_difficulty
-
     @num_correct = 0
+
+    @eval = AddACardValue.new
+
+    @countdown_timer = 1 + set_difficulty
   end
 
   def set_difficulty
@@ -40,25 +42,21 @@ class AddACard
     user_difficulty
   end
 
-  def evaluate_this_round(cards)
-    AddACardValue.new(cards).value
-  end
-
   def round_of_add_a_card
     until @deck.length == 0 # Until all cards in the deck have been exhausted, the game is played
-      this_round_of_cards = []
-
-      2.times { this_round_of_cards << @deck.remove_top_card }
+      cards_this_round = []
+      2.times { cards_this_round << @deck.remove_top_card }
+      @eval.cards(cards_this_round)
 
       puts ""
       puts "What is the sum of:"
-      puts "#{this_round_of_cards.join(" - ")}"
+      puts "#{cards_this_round.join(" - ")}"
 
       begin
         Timeout::timeout(@countdown_timer) {
           user_num = gets.chomp.to_i
 
-          @num_correct += 1 if user_num == evaluate_this_round(this_round_of_cards)
+          @num_correct += 1 if user_num == @eval.value
         }
       rescue
       end
