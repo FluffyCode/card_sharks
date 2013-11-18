@@ -44,8 +44,6 @@ class AddACard
     this_result = (AddACardValue.new(cards)).value
   end
 
-
-
   def round_of_add_a_card
     until @deck.length == 0 # Until all cards in the deck have been exhausted, the game is played
       this_round_of_cards = []
@@ -57,12 +55,10 @@ class AddACard
       puts "#{this_round_of_cards.join(" - ")}"
 
       begin
-        is_correct = Timeout::timeout(@countdown_timer) {
-          user_determined_number = gets.chomp.to_i
+        Timeout::timeout(@countdown_timer) {
+          user_num = gets.chomp.to_i
 
-          if (user_determined_number == evaluate_this_round(this_round_of_cards))
-            @num_correct += 1
-          end
+          @num_correct += 1 if (user_num == evaluate_this_round(this_round_of_cards))
         }
       rescue
       end
