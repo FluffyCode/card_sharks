@@ -14,4 +14,5 @@ class AddACardValue
       sum_of_values + values[card.rank]
     end
   end
+
 end
