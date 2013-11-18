@@ -1,8 +1,8 @@
 # crazy_eights.rb version 2.5
 
-require "card_sharks/deck"
-require "card_sharks/player"
-require "card_sharks/dealer"
+require_relative "../master/deck"
+require_relative "../master/player"
+require_relative "../master/dealer"
 
 # Game rules:
 	# As per http://www.pagat.com/eights/crazy8s.html

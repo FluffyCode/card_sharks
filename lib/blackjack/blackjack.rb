@@ -1,9 +1,9 @@
 # blackjack.rb version 3.3
 
-require "card_sharks/deck"
-require "card_sharks/player"
-require "card_sharks/dealer"
-require "card_sharks/blackjack_value.rb"
+require_relative "../master/deck"
+require_relative "../master/player"
+require_relative "../master/dealer"
+require_relative "blackjack_value"
 
 # Notes on progress / current problems:
 	# Rework hit_or_stay loop - currently, only "stay" is recognized.  If a player inputs anything other than "stay",

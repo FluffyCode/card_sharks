@@ -1,7 +1,7 @@
 # add_a_card.rb version 1.0
 
-require "card_sharks/deck"
-require "card_sharks/add_a_card_value"
+require_relative "../master/deck"
+require_relative "add_a_card_value"
 require "timeout"
 
 # Game rules for "Add A Card"

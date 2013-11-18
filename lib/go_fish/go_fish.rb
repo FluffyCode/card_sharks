@@ -14,9 +14,9 @@
 
 	# List of thing to do/fix:
 
-require "card_sharks/deck"
-require "card_sharks/player"
-require "card_sharks/dealer"
+require_relative "../master/deck"
+require_relative "../master/player"
+require_relative "../master/dealer"
 
 class GoFish
 	def initialize
