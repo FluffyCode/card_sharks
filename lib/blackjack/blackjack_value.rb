@@ -10,9 +10,7 @@ class BlackjackValue
   end
 
   def value
-    hand_value = @hand.reduce(0) do |sum_of_values, card|
-      sum_of_values + values[card.rank]
-    end
+    hand_value = @hand.reduce(0) { |sum, card| sum + values[card.rank] }
 
     ace_count = @hand.count { |card| card.include?("Ace") }
     if hand_value > 21 && ace_count > 0
