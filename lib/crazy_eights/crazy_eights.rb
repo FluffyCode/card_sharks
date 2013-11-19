@@ -210,9 +210,7 @@ class CrazyEights
       can_play_these = []
 
       @dealer.hand.each do |card|
-        if check_for_match(card)
-          can_play_these << card
-        end
+        can_play_these << card if check_for_match(card)
       end
 
       if can_play_these.length > 0
