@@ -75,3 +75,8 @@ class AddACard
 end
 
 AddACard.new.round_of_add_a_card
+
+# To do:
+  # Implement bonus multiplier for difficulty level? Ie:
+    # difficulty = 5, 4, 3, 2, 1
+    # multiplier = 1x, 2x, 3x, 4x, 5x
