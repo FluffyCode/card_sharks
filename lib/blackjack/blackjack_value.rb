@@ -29,14 +29,10 @@ class BlackjackValue
     if @hand.length > 2
       false
     else
-      has_ace = true if (@hand[0].include?("Ace") == true || @hand[1].include?("Ace") == true)
-      has_jack = true if (@hand[0].include?("Jack") == true || @hand[1].include?("Jack") == true)
+      has_ace = true if @hand.each { |c| c[:rank] == "Ace" }
+      has_jack = true if @hand.each { |c| c[:rank] == "Jack" }
 
-      if has_ace && has_jack
-        true
-      else
-        false
-      end
+      true if has_ace && has_jack
     end
   end
 end
