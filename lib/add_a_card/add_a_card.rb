@@ -23,14 +23,15 @@ class AddACard
 
     @eval = AddACardValue.new
 
-    @countdown_timer = 1 + set_difficulty
+    @difficulty = set_difficulty
+    @countdown_timer = 1 + @difficulty[:timer]
   end
 
   def set_difficulty
     # Prompt player for preferred difficulty (1-5; lower number = hardest, highest number = easiest)
     puts ""
     puts "Which difficulty level would you like to play at? Input a number between 1 and 5:"
-    puts "1 = hardest, 2 = hard, 3 = medium, 4 = easy, 5 = easiest."
+    puts "5 = hardest, 4 = hard, 3 = medium, 2 = easy, 1 = easiest."
 
     user_difficulty = gets.chomp.to_i
 
@@ -40,7 +41,18 @@ class AddACard
       user_difficulty = gets.chomp.to_i
     end
 
-    user_difficulty
+    case user_difficulty
+      when 1
+        { difficulty: "easiest", score_multiplier: 1, timer: 5 }
+      when 2
+        { difficulty: "easy", score_multiplier: 2, timer: 4 }
+      when 3
+        { difficulty: "normal", score_multiplier: 3, timer: 3 }
+      when 4
+        { difficulty: "hard", score_multiplier: 4, timer: 2 }
+      when 5
+        { difficulty: "hardest", score_multiplier: 5, timer: 1 }
+    end
   end
 
   def round_of_add_a_card
@@ -60,7 +72,7 @@ class AddACard
 
           if user_num == value
             @num_correct += 1
-            @score += value
+            @score += (value * @difficulty[:score_multiplier])
           end
         }
       rescue
@@ -69,14 +81,9 @@ class AddACard
 
     puts ""
     puts "Out of 26 rounds, you got #{@num_correct} correct."
-    puts "Your total score is: #{@score} / 376."
+    puts "You scored #{@score} out of a possible #{376 * @difficulty[:score_multiplier]} for this difficulty (#{@difficulty[:difficulty]})."
   end # end round_of_add_a_card
 
 end
 
 AddACard.new.round_of_add_a_card
-
-# To do:
-  # Implement bonus multiplier for difficulty level? Ie:
-    # difficulty = 5, 4, 3, 2, 1
-    # multiplier = 1x, 2x, 3x, 4x, 5x
