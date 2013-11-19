@@ -54,6 +54,8 @@ class CrazyEights
 
     # Next card taken from the deck becomes the start of the discard pile
     @discard_pile = Array.new << @deck.remove_top_card
+    puts ""
+    puts "The game begins - the top card is #{@discard_pile[-1]}."
 
     def update_playable_suit
       @playable_suit = @discard_pile[-1]::suit
