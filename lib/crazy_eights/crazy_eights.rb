@@ -49,8 +49,7 @@ class CrazyEights
     @deck = Deck.new
     5.times { @deck.shuffle! }
 
-    7.times { @player.deal(@deck.remove_top_card) }
-    7.times { @dealer.deal(@deck.remove_top_card) }
+    7.times { @player.deal(@deck.remove_top_card) ; @dealer.deal(@deck.remove_top_card) }
 
     # Next card taken from the deck becomes the start of the discard pile
     @discard_pile = Array.new << @deck.remove_top_card
