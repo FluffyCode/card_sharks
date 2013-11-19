@@ -67,11 +67,7 @@ class CrazyEights
       update_playable_suit
 
       def determine_plural(value)
-        if value == 1
-          return "#{value} card"
-        else
-          return "#{value} cards"
-        end
+        value == 1 ? "#{value} card" : "#{value} cards"
       end
 
       puts
