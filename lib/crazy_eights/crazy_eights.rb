@@ -4,6 +4,9 @@ require_relative "../master/deck"
 require_relative "../master/player"
 require_relative "../master/dealer"
 
+# To-do:
+  # Add catch - deny player the ability to pass if they can make a legal play?
+
 # Game rules:
   # As per http://www.pagat.com/eights/crazy8s.html
 
