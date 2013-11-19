@@ -27,8 +27,10 @@ class BlackjackValue
     if @hand.length > 2
       false
     else
-      has_ace = true if @hand.each { |c| c[:rank] == "Ace" }
-      has_jack = true if @hand.each { |c| c[:rank] == "Jack" }
+      has_ace = has_jack = nil
+
+      @hand.each { |c| has_ace  = true if c[:rank] == "Ace"  }
+      @hand.each { |c| has_jack = true if c[:rank] == "Jack" }
 
       true if has_ace && has_jack
     end
