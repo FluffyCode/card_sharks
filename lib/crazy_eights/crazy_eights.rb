@@ -146,20 +146,14 @@ class CrazyEights
       dealer_can_make_play = false
 
       @player.hand.each do |card|
-        if check_for_match(card)
-          player_can_make_play = true
-        end
+        player_can_make_play = true if check_for_match(card)
       end
 
       @dealer.hand.each do |card|
-        if check_for_match(card)
-          dealer_can_make_play = true
-        end
+        dealer_can_make_play = true if check_for_match(card)
       end
 
-      if (player_can_make_play == false) && (dealer_can_make_play == false)
-        replace_deck(player)
-      end
+      replace_deck(player) if (player_can_make_play == false) && (dealer_can_make_play == false)
     end
 
     # Intermediary stage - check for game overs, & the play of 8's here
