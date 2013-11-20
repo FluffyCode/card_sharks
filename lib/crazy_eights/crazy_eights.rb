@@ -49,6 +49,19 @@ require_relative "../master/dealer"
     # The current playable rank is Eight, and the current playable suit is Hearts. <--- WAT?
     # There are 4 cards in the draw pile, and 43 cards in the discard pile.
 
+      # is properly setting suit for player-played Eights, however:
+
+    # You play your Eight of Spades.
+
+    # You played an Eight - nominate a new rank: Clubs, Diamonds, Hearts or Spades.
+    # Diamonds
+
+    # You chose to change the playable suit to: Diamonds.
+
+    # The top card on the discard pile is: Eight of Spades.
+
+    # The dealer plays their Three of Diamonds.
+
 
 
 # Game rules:
@@ -129,12 +142,13 @@ class CrazyEights
     end
 
     def can_make_valid_play(player)
+      can_make_play = false
+
       player.hand.each do |card|
-        if check_for_match(card)
-          true
-          break
-        end
+        can_make_play = true if check_for_match(card)
       end
+
+      can_make_play
     end
 
     def players_turn
@@ -193,9 +207,6 @@ class CrazyEights
 
     # Determine if conditions are appropriate for deck reshuffling
     def time_to_reshuffle_deck(player)
-      # Presently, this does not work. If neither player can make a legal play, and the draw pile is out of cards,
-      # the game degenerates into "turn bouncing" - the discard pile is NOT reshuffled into a new draw pile.
-
       replace_deck(player) unless can_make_valid_play(@player) || can_make_valid_play(@dealer)
     end
 
