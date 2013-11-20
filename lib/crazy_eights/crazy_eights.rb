@@ -125,8 +125,6 @@ class CrazyEights
     def intermediary_stage(player)
       update_playable_suit
 
-      is_an_eight = true if @discard_pile[-1]::rank == "Eight"
-
       if @player.hand.length == 0
         puts ""
         puts "You were the first to clear all cards from your hand - you win!"
@@ -136,6 +134,8 @@ class CrazyEights
         puts "The dealer was first to clear their hand of all cards and won this game."
         exit 0
       end
+
+      is_an_eight = true if @discard_pile[-1]::rank == "Eight"
 
       if is_an_eight
         if player == "player"
