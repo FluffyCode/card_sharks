@@ -212,9 +212,7 @@ class CrazyEights
     puts "The draw pile is empty, and no plays can be made."
 
     # Take all the cards from the discard pile, and put them back into the deck
-    until @discard_pile.size == 0
-      @deck.add_card_to_deck(@discard_pile.delete_at(-1))
-    end
+    @deck.add_card_to_deck(@discard_pile.delete_at(-1)) until @discard_pile.size == 0
 
     # Shuffle the deck
     5.times { @deck.shuffle! }
