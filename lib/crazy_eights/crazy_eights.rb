@@ -22,7 +22,6 @@ class CrazyEights
 
     7.times { @player.deal(@deck.remove_top_card) ; @dealer.deal(@deck.remove_top_card) }
 
-    # Next card taken from the deck becomes the start of the discard pile
     @discard_pile = Array.new << @deck.remove_top_card
     @msg_handler.message("begin", :card => @discard_pile[-1])
 
@@ -150,7 +149,6 @@ class CrazyEights
     invert_player_turn(player)
   end # end of intermediary_stage
 
-  # Dealers turn
   def dealers_turn
     can_play_these = []
 
@@ -168,10 +166,12 @@ class CrazyEights
       if @deck.deck(0) != nil
         @dealer.deal(@deck.remove_top_card)
         @msg_handler.message("dealer_draws")
+
         dealers_turn
       else
         @msg_handler.message("dealer_cant_play")
         time_to_reshuffle_deck("player")
+
         players_turn
       end 
     end
@@ -184,16 +184,11 @@ class CrazyEights
 
   # Deck reshuffling (in case no legal plays can be made && draw pile is empty)
   def replace_deck(player)
-    # Take all the cards from the discard pile, and put them back into the deck
     @deck.add_card_to_deck(@discard_pile.delete_at(-1)) until @discard_pile.size == 0
-
-    # Shuffle the deck
     5.times { @deck.shuffle! }
 
-    # Place a card from the reshuffled deck onto the discard pile
     @discard_pile << @deck.remove_top_card
     update_playable_suit
-
     @msg_handler.message("reshuffle")
 
     invert_player_turn(player)
