@@ -66,8 +66,6 @@ class CrazyEights
     end
 
     def get_info
-      update_playable_suit
-
       def determine_plural(value)
         value == 1 ? "#{value} card" : "#{value} cards"
       end
@@ -192,9 +190,6 @@ class CrazyEights
           end
 
         elsif player == "dealer"
-          # DAFUQ alert
-          # Something not right here
-
           random_num = rand(@dealer.hand.length)
 
           @playable_suit = @dealer.hand[random_num]::suit
