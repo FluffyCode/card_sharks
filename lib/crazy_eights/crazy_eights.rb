@@ -157,13 +157,11 @@ class CrazyEights
             intermediary_stage(player)
           end
 
-        elsif player == "dealer"
-          random_num = rand(@dealer.hand.length)
-
-          @playable_suit = @dealer.hand[random_num]::suit
+        else
+          @playable_suit = @dealer.hand[rand(@dealer.hand.length)]::suit
 
           puts ""
-          puts "The dealer played an Eight, and decided to change the suit to #{@dealer.hand[random_num]::suit}."
+          puts "The dealer played an Eight, and decided to change the suit to #{@playable_suit}."
 
           players_turn
         end
