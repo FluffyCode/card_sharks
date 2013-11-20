@@ -84,6 +84,15 @@ class CrazyEights
       end
     end
 
+    def can_make_valid_play(player)
+      player.hand.each do |card|
+        if check_for_match(card)
+          true
+          break
+        end
+      end
+    end
+
     def players_turn
       puts
       puts "What card would you like to play?  Your hand contains:"
@@ -140,18 +149,10 @@ class CrazyEights
 
     # Determine if conditions are appropriate for deck reshuffling
     def time_to_reshuffle_deck(player)
-      player_can_make_play = false
-      dealer_can_make_play = false
+      # Presently, this does not work. If neither player can make a legal play, and the draw pile is out of cards,
+      # the game degenerates into "turn bouncing" - the discard pile is NOT reshuffled into a new draw pile.
 
-      @player.hand.each do |card|
-        player_can_make_play = true if check_for_match(card)
-      end
-
-      @dealer.hand.each do |card|
-        dealer_can_make_play = true if check_for_match(card)
-      end
-
-      replace_deck(player) if (player_can_make_play == false) && (dealer_can_make_play == false)
+      replace_deck(player) unless can_make_valid_play(@player) || can_make_valid_play(@dealer)
     end
 
     # Intermediary stage - check for game overs, & the play of 8's here
