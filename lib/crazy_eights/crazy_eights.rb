@@ -3,6 +3,7 @@
 require_relative "../master/deck"
 require_relative "../master/player"
 require_relative "../master/dealer"
+require_relative "messages"
 
 # To-do:
   # Add catch - deny player the ability to pass if they can make a legal play?
@@ -11,6 +12,8 @@ require_relative "../master/dealer"
 
 class CrazyEights
   def initialize
+    @msg_handler = CrazyEightsMessages.new
+
     @player = Player.new
     @dealer = Dealer.new
 
@@ -63,12 +66,8 @@ class CrazyEights
   end
 
   def players_turn
-    puts
-    puts "What card would you like to play?  Your hand contains:"
-    puts "#{@player.tell_hand_numbered}"
-    puts
-    puts "Type 'pass' to draw a card, or pass."
-    puts "Type 'info' to get game info."
+    @msg_handler.message("player_turn", :player => @player)
+
     # User is prompted for input
     @user_input = gets.chomp
 
@@ -79,8 +78,7 @@ class CrazyEights
         dealers_turn
       else
         @player.deal(@deck.remove_top_card)
-        puts ""
-        puts "You draw #{@player.hand[-1]} from the draw pile."
+        @msg_handler.message("player_draws", :player => @player)
         players_turn
       end
 
@@ -96,8 +94,7 @@ class CrazyEights
         @user_input -= 1
 
         if check_for_match(@player.hand[@user_input])
-          puts ""
-          puts "You play your #{@player.hand[@user_input]}."
+          @msg_handler.message("player_plays", :player => @player, :card => @user_input)
           @discard_pile << @player.hand.delete_at(@user_input)
 
           intermediary_stage("player")      
