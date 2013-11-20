@@ -7,61 +7,6 @@ require_relative "../master/dealer"
 # To-do:
   # Add catch - deny player the ability to pass if they can make a legal play?
 
-  # Issue:
-    # The dealer plays their Eight of Clubs.
-
-    # The dealer played an Eight, and decided to change the suit to Spades. <---
-
-    # What card would you like to play?  Your hand contains:
-    # Ten of Hearts (1), Jack of Spades (2), King of Spades (3), Queen of Hearts (4), Seven of Hearts (5), Seven of Clubs (6)
-
-    # Type 'pass' to draw a card, or pass.
-    # Type 'info' to get game info.
-    # info
-
-    # You have 6 cards in your hand, and the dealer has 6 cards.
-    # The current playable rank is Eight, and the current playable suit is Clubs. <--- WAT?
-    # There are 17 cards in the draw pile, and 23 cards in the discard pile.
-
-    # What card would you like to play?  Your hand contains:
-    # Ten of Hearts (1), Jack of Spades (2), King of Spades (3), Queen of Hearts (4), Seven of Hearts (5), Seven of Clubs (6)
-
-    # Type 'pass' to draw a card, or pass.
-    # Type 'info' to get game info.
-    # 2
-
-    # You cannot play Jack of Spades - either rank or suit (or both) does not match.
-
-      # ...later on...
-
-    # The dealer plays their Eight of Hearts.
-
-    # The dealer played an Eight, and decided to change the suit to Diamonds. <---
-
-    # What card would you like to play?  Your hand contains:
-    # Seven of Hearts (1), Three of Clubs (2)
-
-    # Type 'pass' to draw a card, or pass.
-    # Type 'info' to get game info.
-    # info
-
-    # You have 2 cards in your hand, and the dealer has 3 cards.
-    # The current playable rank is Eight, and the current playable suit is Hearts. <--- WAT?
-    # There are 4 cards in the draw pile, and 43 cards in the discard pile.
-
-      # is properly setting suit for player-played Eights, however:
-
-    # You play your Eight of Spades.
-
-    # You played an Eight - nominate a new rank: Clubs, Diamonds, Hearts or Spades.
-    # Diamonds
-
-    # You chose to change the playable suit to: Diamonds.
-
-    # The top card on the discard pile is: Eight of Spades.
-
-    # The dealer plays their Three of Diamonds.
-
 
 
 # Game rules:
@@ -247,6 +192,9 @@ class CrazyEights
           end
 
         elsif player == "dealer"
+          # DAFUQ alert
+          # Something not right here
+
           random_num = rand(@dealer.hand.length)
 
           @playable_suit = @dealer.hand[random_num]::suit
