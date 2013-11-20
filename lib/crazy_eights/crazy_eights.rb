@@ -24,8 +24,7 @@ class CrazyEights
 
     # Next card taken from the deck becomes the start of the discard pile
     @discard_pile = Array.new << @deck.remove_top_card
-    puts ""
-    puts "The game begins - the top card is #{@discard_pile[-1]}."
+    @msg_handler.message("begin", :card => @discard_pile[-1])
 
     # Starting the game:
     update_playable_suit
@@ -37,14 +36,9 @@ class CrazyEights
   end
 
   def get_info
-    def determine_plural(value)
-      value == 1 ? "#{value} card" : "#{value} cards"
-    end
-
-    puts
-    puts "You have #{determine_plural(@player.hand.size)} in your hand, and the dealer has #{determine_plural(@dealer.hand.size)}."
-    puts "The current playable rank is #{@discard_pile[-1]::rank}, and the current playable suit is #{@playable_suit}."
-    puts "There are #{determine_plural(@deck.length)} in the draw pile, and #{determine_plural(@discard_pile.length)} in the discard pile."
+    @msg_handler.message("info", :p_cards => @player.hand.size, :d_cards => @dealer.hand.size,
+      :rank => @discard_pile[-1]::rank, :suit => @playable_suit, :draw => @deck.length, :discard => @discard_pile.length
+    )
 
     players_turn
   end
@@ -99,14 +93,12 @@ class CrazyEights
 
           intermediary_stage("player")      
         else
-          puts ""
-          puts "You cannot play #{@player.hand[@user_input]} - either rank or suit (or both) does not match."
+          @msg_handler.message("bad_play", :card => @player.hand[@user_input])
           players_turn
         end
 
       else
-        puts ""
-        puts "Error: was expecting 'pass' or an integer between 1 and #{@player.hand.length}."
+        @msg_handler.message("bad_input", :size => @player.hand.length)
         players_turn
       end
     end
@@ -123,12 +115,10 @@ class CrazyEights
     update_playable_suit
 
     if @player.hand.length == 0
-      puts ""
-      puts "You were the first to clear all cards from your hand - you win!"
+      @msg_handler.message("game_win")
       exit 0
     elsif @dealer.hand.length == 0
-      puts ""
-      puts "The dealer was first to clear their hand of all cards and won this game."
+      @msg_handler.message("game_lose")
       exit 0
     end
 
@@ -136,29 +126,22 @@ class CrazyEights
 
     if is_an_eight
       if player == "player"
-        puts ""
-        puts "You played an Eight - nominate a new rank: Clubs, Diamonds, Hearts or Spades."
+        @msg_handler.message("nominate_rank")
 
         @new_suit = gets.chomp.downcase.capitalize!
         if @new_suit == "Clubs" || @new_suit == "Diamonds" || @new_suit == "Hearts" || @new_suit == "Spades"
           @playable_suit = @new_suit
-          puts ""
-          puts "You chose to change the playable suit to: #{@new_suit}."
-          puts ""
-          puts "The top card on the discard pile is: #{@discard_pile[-1]}."
+          @msg_handler.message("player_new_suit", :suit => @new_suit, :card => @discard_pile[-1])
 
           dealers_turn
         else
-          puts ""
-          puts "Error: was expecting a string for a new suit."
+          @msg_handler.message("bad_suit_input")
           intermediary_stage(player)
         end
 
       else
         @playable_suit = @dealer.hand[rand(@dealer.hand.length)]::suit
-
-        puts ""
-        puts "The dealer played an Eight, and decided to change the suit to #{@playable_suit}."
+        @msg_handler.message("dealer_new_suit", :suit => @playable_suit)
 
         players_turn
       end
@@ -177,21 +160,17 @@ class CrazyEights
 
     if can_play_these.length > 0
       chosen_card = can_play_these[rand(can_play_these.length)]
-
-      puts ""
-      puts "The dealer plays their #{chosen_card}."
+      @msg_handler.message("dealer_plays", :card => chosen_card)
       @discard_pile << @dealer.hand.delete(chosen_card)
 
       intermediary_stage("dealer")
     else
       if @deck.deck(0) != nil
         @dealer.deal(@deck.remove_top_card)
-        puts ""
-        puts "The dealer was unable to play a card, and draws from the draw pile."
+        @msg_handler.message("dealer_draws")
         dealers_turn
       else
-        puts ""
-        puts "The dealer was unable to play a card."
+        @msg_handler.message("dealer_cant_play")
         time_to_reshuffle_deck("player")
         players_turn
       end 
@@ -205,9 +184,6 @@ class CrazyEights
 
   # Deck reshuffling (in case no legal plays can be made && draw pile is empty)
   def replace_deck(player)
-    puts ""
-    puts "The draw pile is empty, and no plays can be made."
-
     # Take all the cards from the discard pile, and put them back into the deck
     @deck.add_card_to_deck(@discard_pile.delete_at(-1)) until @discard_pile.size == 0
 
@@ -218,7 +194,7 @@ class CrazyEights
     @discard_pile << @deck.remove_top_card
     update_playable_suit
 
-    puts "The discard pile has been reshuffled into the draw pile."
+    @msg_handler.message("reshuffle")
 
     invert_player_turn(player)
   end
