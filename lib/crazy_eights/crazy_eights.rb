@@ -7,6 +7,50 @@ require_relative "../master/dealer"
 # To-do:
   # Add catch - deny player the ability to pass if they can make a legal play?
 
+  # Issue:
+    # The dealer plays their Eight of Clubs.
+
+    # The dealer played an Eight, and decided to change the suit to Spades. <---
+
+    # What card would you like to play?  Your hand contains:
+    # Ten of Hearts (1), Jack of Spades (2), King of Spades (3), Queen of Hearts (4), Seven of Hearts (5), Seven of Clubs (6)
+
+    # Type 'pass' to draw a card, or pass.
+    # Type 'info' to get game info.
+    # info
+
+    # You have 6 cards in your hand, and the dealer has 6 cards.
+    # The current playable rank is Eight, and the current playable suit is Clubs. <--- WAT?
+    # There are 17 cards in the draw pile, and 23 cards in the discard pile.
+
+    # What card would you like to play?  Your hand contains:
+    # Ten of Hearts (1), Jack of Spades (2), King of Spades (3), Queen of Hearts (4), Seven of Hearts (5), Seven of Clubs (6)
+
+    # Type 'pass' to draw a card, or pass.
+    # Type 'info' to get game info.
+    # 2
+
+    # You cannot play Jack of Spades - either rank or suit (or both) does not match.
+
+      # ...later on...
+
+    # The dealer plays their Eight of Hearts.
+
+    # The dealer played an Eight, and decided to change the suit to Diamonds. <---
+
+    # What card would you like to play?  Your hand contains:
+    # Seven of Hearts (1), Three of Clubs (2)
+
+    # Type 'pass' to draw a card, or pass.
+    # Type 'info' to get game info.
+    # info
+
+    # You have 2 cards in your hand, and the dealer has 3 cards.
+    # The current playable rank is Eight, and the current playable suit is Hearts. <--- WAT?
+    # There are 4 cards in the draw pile, and 43 cards in the discard pile.
+
+
+
 # Game rules:
   # As per http://www.pagat.com/eights/crazy8s.html
 
