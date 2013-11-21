@@ -43,9 +43,7 @@ class CrazyEights
   end
 
   def check_for_match(card_being_played)
-    if card_being_played::rank == @discard_pile[-1]::rank || card_being_played::suit == @playable_suit || card_being_played::rank == "Eight"
-      true
-    end
+    true if card_being_played::rank == @discard_pile[-1]::rank || card_being_played::suit == @playable_suit || card_being_played::rank == "Eight"
   end
 
   def can_make_valid_play(player)
@@ -109,10 +107,7 @@ class CrazyEights
     replace_deck(player) unless can_make_valid_play(@player) || can_make_valid_play(@dealer)
   end
 
-  # Intermediary stage - check for game overs, & the play of 8's here
-  def intermediary_stage(player)
-    update_playable_suit
-
+  def determine_endgame
     if @player.hand.length == 0
       @msg_handler.message("game_win")
       exit 0
@@ -120,32 +115,37 @@ class CrazyEights
       @msg_handler.message("game_lose")
       exit 0
     end
+  end
 
-    is_an_eight = true if @discard_pile[-1]::rank == "Eight"
+  def declare_new_suit(player)
+    if player == "player"
+      @msg_handler.message("nominate_rank")
 
-    if is_an_eight
-      if player == "player"
-        @msg_handler.message("nominate_rank")
-
-        @new_suit = gets.chomp.downcase.capitalize!
-        if @new_suit == "Clubs" || @new_suit == "Diamonds" || @new_suit == "Hearts" || @new_suit == "Spades"
-          @playable_suit = @new_suit
-          @msg_handler.message("player_new_suit", :suit => @new_suit, :card => @discard_pile[-1])
-
-          dealers_turn
-        else
-          @msg_handler.message("bad_suit_input")
-          intermediary_stage(player)
-        end
-
+      new_suit = gets.chomp.downcase.capitalize!
+      if new_suit == "Clubs" || new_suit == "Diamonds" || new_suit == "Hearts" || new_suit == "Spades"
+        @playable_suit = new_suit
+        @msg_handler.message("player_new_suit", :suit => new_suit, :card => @discard_pile[-1])
       else
-        @playable_suit = @dealer.hand[rand(@dealer.hand.length)]::suit
-        @msg_handler.message("dealer_new_suit", :suit => @playable_suit)
-
-        players_turn
+        @msg_handler.message("bad_suit_input")
+        declare_new_suit(player)
       end
+
+    else
+      @playable_suit = @dealer.hand[rand(@dealer.hand.length)]::suit
+      @msg_handler.message("dealer_new_suit", :suit => @playable_suit)
     end
-    
+  end
+
+  # Intermediary stage - check for game overs, & the play of 8's here
+  def intermediary_stage(player)
+    update_playable_suit
+
+    determine_endgame
+
+    if @discard_pile[-1]::rank == "Eight"
+      declare_new_suit(player)
+    end
+
     invert_player_turn(player)
   end # end of intermediary_stage
 
