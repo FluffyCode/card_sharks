@@ -2,6 +2,9 @@
 
 # List of thing to do/fix:
   # Refactor
+  # Move messages to their own file; make use of a message handler
+  # Touchup messages with spacing
+  # Review game notes and make changes as needed
 
 
 
