@@ -1,4 +1,4 @@
-Game rules:
+Crazy Eights - Game rules:
   As per http://www.pagat.com/eights/crazy8s.html
 
   Use standard 52-card deck.
