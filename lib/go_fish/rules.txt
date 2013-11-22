@@ -1,0 +1,11 @@
+Go Fish - Game rules:
+  Players take turns asking for cards from one another.
+  If Player A has what Player B asks for, the Player A must turn over ALL cards of that RANK to Player B.
+  If a player gets what they ask for, they get another turn.
+  If Player A doesn't get what they ask for from Player B, but gets what they asked for from "going fishing,"
+    Player A gets another turn - they announce that they got what they asked for.
+  A player CANNOT ask for something if they DO NOT have at least one of what they are asking for
+  When a player's hand contains all 4 suits of a RANK (ie, King King King King), all of those cards are set aside
+    into a permanent score-pool for that player.
+  Player's score based on how many sets of 4 they have.
+  If a player runs out of cards he must wait until the game is over and cannot gain any more cards or books. (as per wikipedia)
