@@ -23,14 +23,9 @@ class GoFish
     @deck.shuffle!
 
     # Initial deal; 7 cards go to each player:
-    7.times { @player.deal(@deck.remove_top_card) }
-    7.times { @dealer.deal(@deck.remove_top_card) }
+    7.times { @player.deal(@deck.remove_top_card); @dealer.deal(@deck.remove_top_card) }
 
     puts "Player hand: #{@player.tell_hand}."
-
-    def strip_suit(card)
-      card.to_s.gsub(/( of Clubs)/, "").gsub(/( of Diamonds)/, "").gsub(/( of Hearts)/, "").gsub(/( of Spades)/, "")
-    end
 
     def check_for_game_over
       player_score = @player.score_pool.length / 4
@@ -51,7 +46,7 @@ class GoFish
       ranks_to_search_for = []
       is_set_of_four = 0
       player.hand.each do |card|
-        ranks_to_search_for << strip_suit(card)
+        ranks_to_search_for << card::rank
       end
 
       ranks_to_search_for.each do |rank|
@@ -98,7 +93,7 @@ class GoFish
       cards_to_chose_from = []
       # populate the choice-pool:
       @dealer.hand.each do |card|
-        cards_to_chose_from << strip_suit(card)
+        cards_to_chose_from << card::rank
       end
       # randomly determine which card the dealer will ask for:
       random_card = cards_to_chose_from[rand(cards_to_chose_from.length)]
