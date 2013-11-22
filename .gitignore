@@ -15,3 +15,5 @@ spec/reports
 test/tmp
 test/version_tmp
 tmp
+
+lib/go_fish/z_game
