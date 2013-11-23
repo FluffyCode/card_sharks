@@ -11,11 +11,14 @@
 require_relative "../master/deck"
 require_relative "../master/player"
 require_relative "../master/dealer"
+require_relative "messages"
 
 class GoFish
   def initialize
     @player = Player.new
     @dealer = Dealer.new
+
+    @msg_handler = GoFishMessages.new
   end
 
   def round_of_go_fish
@@ -28,18 +31,13 @@ class GoFish
     # Initial deal; 7 cards go to each player:
     7.times { @player.deal(@deck.remove_top_card); @dealer.deal(@deck.remove_top_card) }
 
-    puts "Player hand: #{@player.tell_hand}."
+    @msg_handler.message("tell_hand")
 
     def check_for_game_over
       player_score = @player.score_pool.length / 4
       dealer_score = @dealer.score_pool.length / 4
       if player_score + dealer_score == 13
-        puts "The game is over; you have #{player_score} sets, and the dealer has #{dealer_score} sets."
-        if player_score > dealer_score
-          puts "You won this round!"
-        else
-          puts "The dealer won this round."
-        end
+        @msg_handler.message("game_end", :p_score => player_score, :d_score => dealer_score)
         play_a_game
       end
     end
