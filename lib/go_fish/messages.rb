@@ -15,7 +15,59 @@ class GoFishMessages
       else
         puts "The dealer won this round."
       end
-      
+
+    when "player_score"
+      puts "You score with a set of #{optns[:rank]}."
+
+    when "dealer_score"
+      puts "The dealer scores with a set of #{optns[:rank]}."
+
+    when "no_cards"
+      puts "#{optns[:context]} out of cards."
+
+    when "dealer_asks"
+      puts "The dealer asks for: #{optns[:card]}."
+
+    when "pass_dealer_cards"
+      puts "You pass the dealer your #{optns[:card]}."
+
+    when "dealer_doesnt_get"
+      puts "The dealer didn't get a #{optns[:card]}, and goes fishing instead."
+
+    when "player_doesnt_get"
+      puts "The dealer did not have any: #{optns[:card]}."
+
+    when "pass_player_cards"
+      puts "The dealer passes you their #{optns[:card]}."
+
+    when "cant_ask"
+      puts "You cannot ask for that, as you do not have any."
+
+    when "player_fishes"
+      puts "You fished a #{optns[:card]} from the pool."
+
+    when "no_fish"
+      puts "There are no more fish in the pool."
+
+    when "got_asking_card"
+      if optns[:player] == "player"
+        puts "You got what you asked for! You get another turn."
+      else
+        puts "The dealer got what they asked for, and gets another turn."
+      end
+
+    when "player_turn"
+      puts "What rank do you want to ask your opponent for? (Type 'hand' to see your hand.)"
+
+    when "first_turn"
+      puts "#{optns[:context]} the first turn."
+
+    when "greet"
+      puts "Would you like to play a game of Go Fish?"
+
+    when "farewell"
+      puts "Alrighty then, another time!"
+
     end
       
   end

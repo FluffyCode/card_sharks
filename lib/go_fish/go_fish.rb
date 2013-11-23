@@ -73,9 +73,9 @@ class GoFish
         
         # tell the player (or dealer) what they scored with
         if player == @player
-          puts "You score with a set of #{@last_rank_called}."
+          @msg_handler.message("player_score", :rank => @last_rank_called)
         else
-          puts "The dealer scores with a set of #{@last_rank_called}."
+          @msg_handler.message("dealer_score", :rank => @last_rank_called)
         end
       end
 
@@ -86,7 +86,7 @@ class GoFish
     def dealers_turn
       # If the dealer has no cards remaining:
       if @dealer.hand.length == 0
-        puts "The dealer is out of cards."
+        @msg_handler.message("no_cards", :context => "The dealer is")
         ask_for(0)
       end
 
@@ -100,7 +100,7 @@ class GoFish
       random_card = cards_to_chose_from[rand(cards_to_chose_from.length)]
 
       # ask for it:
-      puts "The dealer asks for: #{random_card}."
+      @msg_handler.message("dealer_asks", :card => random_card)
 
       got_what_they_asked_for = false
 
@@ -109,7 +109,7 @@ class GoFish
       
       until @player.hand[x] == nil
         if @player.hand[x].include?(random_card)
-          puts "You pass the dealer your #{@player.hand[x]}."
+          @msg_handler.message("pass_dealer_cards", :card => @player.hand[x])
           @dealer.deal(@player.hand.delete(@player.hand[x]))
           got_what_they_asked_for = true
         else
@@ -121,7 +121,7 @@ class GoFish
         find_matching_set(@dealer)
         ask_for(2)
       else
-        puts "The dealer didn't get a #{random_card}, and goes fishing instead."
+        @msg_handler.message("dealer_doesnt_get", :card => random_card)
         go_fish(random_card, @dealer)
         ask_for(0)
       end
@@ -130,7 +130,7 @@ class GoFish
     def player_turn(requested_card)
       # If the player has no cards remaining:
       if @player.hand.length == 0
-        puts "You are out of cards."
+        @msg_handler.message("no_cards", :context => "You are")
         dealers_turn
       end
 
@@ -146,7 +146,7 @@ class GoFish
         
         until @dealer.hand[x] == nil
           if @dealer.hand[x].include?(requested_card)
-            puts "The dealer passes you their #{@dealer.hand[x]}."
+            @msg_handler.message("pass_player_cards", :card => @dealer.hand[x])
             @player.deal(@dealer.hand.delete(@dealer.hand[x]))
             got_what_they_asked_for = true
           else
@@ -154,7 +154,7 @@ class GoFish
           end
         end
       else
-        puts "You cannot ask for that, as you do not have any."
+        @msg_handler.message("cant_ask")
         ask_for(0)
       end
 
@@ -162,7 +162,7 @@ class GoFish
         find_matching_set(@player)
         ask_for(1)
       else
-        puts "The dealer did not have any: #{requested_card}."
+        @msg_handler.message("player_doesnt_get", :card => requested_card)
         go_fish(requested_card, @player)
         dealers_turn
       end
@@ -175,7 +175,7 @@ class GoFish
         
         # Tell the player what they got (but don't tell the player what the dealer got):
         if player == @player
-          puts "You fished a #{card_to_deal} from the pool."
+          @msg_handler.message("player_fishes", card_to_deal)
         end
 
         find_matching_set(player) # find_matching_set here, after being dealt a card from the "pool"
@@ -191,7 +191,7 @@ class GoFish
 
       else
         # Don't deal a card if there are none left
-        puts "There are no more fish in the pool."
+        @msg_handler.message("no_fish")
 
         if player == @dealer
           ask_for(0)
@@ -203,13 +203,13 @@ class GoFish
 
     def ask_for(x)
       if x == 1
-        puts "You got what you asked for! You get another turn."
+        @msg_handler.message("got_asking_card", :player => "player")
       elsif x == 2
-        puts "The dealer got what they asked for, and gets another turn."
+        @msg_handler.message("got_asking_card", :player => "dealer")
         dealers_turn
       end
 
-      puts "What rank do you want to ask your opponent for? (Type 'hand' to see your hand.)"
+      @msg_handler.message("player_turn")
       requested_card = gets.chomp
       if requested_card == "hand"
         puts
@@ -224,10 +224,10 @@ class GoFish
     # determine who goes first
     def who_goes_first
       if rand(2) == 1
-        puts "You get the first turn."
+        @msg_handler.message("first_turn" :context => "You get")
         ask_for(0)
       else
-        puts "The dealer gets the first turn."
+        @msg_handler.message("first_turn" :context => "The dealer gets")
         dealers_turn
       end
     end
@@ -241,11 +241,11 @@ class GoFish
 end
 
 def play_a_game
-  puts "Would you like to play a game of Go Fish?"
+  @msg_handler.message("greet")
   if gets.chomp.downcase == "yes"
     GoFish.new.round_of_go_fish
   else 
-    puts "Alrighty then, another time!"
+    @msg_handler.message("farewell")
     exit 0
   end
 end
