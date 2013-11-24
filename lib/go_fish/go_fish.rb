@@ -73,9 +73,9 @@ class GoFish
         
         # tell the player (or dealer) what they scored with
         if player == @player
-          @msg_handler.message("player_score", :rank => @last_rank_called)
+          @msg_handler.message("score", :rank => @last_rank_called, :context => "You score")
         else
-          @msg_handler.message("dealer_score", :rank => @last_rank_called)
+          @msg_handler.message("score", :rank => @last_rank_called, :player => "The dealer scores")
         end
       end
 

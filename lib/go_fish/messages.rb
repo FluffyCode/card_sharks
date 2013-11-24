@@ -16,11 +16,8 @@ class GoFishMessages
         puts "The dealer won this round."
       end
 
-    when "player_score"
-      puts "You score with a set of #{optns[:rank]}."
-
-    when "dealer_score"
-      puts "The dealer scores with a set of #{optns[:rank]}."
+    when "score"
+      puts "#{optns[:context]} with a set of #{optns[:rank]}."
 
     when "no_cards"
       puts "#{optns[:context]} out of cards."
