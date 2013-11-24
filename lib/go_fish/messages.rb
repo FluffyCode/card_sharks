@@ -25,17 +25,18 @@ class GoFishMessages
     when "dealer_asks"
       puts "The dealer asks for: #{optns[:card]}."
 
-    when "pass_dealer_cards"
-      puts "You pass the dealer your #{optns[:card]}."
+    when "pass_cards"
+      if optns[:giver] == "player"
+        puts "You pass the dealer your #{optns[:card]}."
+      else
+        puts "The dealer passes you their #{optns[:card]}."
+      end
 
     when "dealer_doesnt_get"
       puts "The dealer didn't get a #{optns[:card]}, and goes fishing instead."
 
     when "player_doesnt_get"
       puts "The dealer did not have any: #{optns[:card]}."
-
-    when "pass_player_cards"
-      puts "The dealer passes you their #{optns[:card]}."
 
     when "cant_ask"
       puts "You cannot ask for that, as you do not have any."

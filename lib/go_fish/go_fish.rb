@@ -109,7 +109,7 @@ class GoFish
       
       until @player.hand[x] == nil
         if @player.hand[x].include?(random_card)
-          @msg_handler.message("pass_dealer_cards", :card => @player.hand[x])
+          @msg_handler.message("pass_cards", :card => @player.hand[x], :giver => "player")
           @dealer.deal(@player.hand.delete(@player.hand[x]))
           got_what_they_asked_for = true
         else
@@ -146,7 +146,7 @@ class GoFish
         
         until @dealer.hand[x] == nil
           if @dealer.hand[x].include?(requested_card)
-            @msg_handler.message("pass_player_cards", :card => @dealer.hand[x])
+            @msg_handler.message("pass_cards", :card => @dealer.hand[x], :giver => "dealer")
             @player.deal(@dealer.hand.delete(@dealer.hand[x]))
             got_what_they_asked_for = true
           else
