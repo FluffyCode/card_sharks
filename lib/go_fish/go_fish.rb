@@ -33,35 +33,28 @@ class GoFish
     def find_matching_set(player)
       # look for matching sets
       ranks_to_search_for = []
-      is_set_of_four = false
+
       player.hand.each { |card| ranks_to_search_for << card::rank }
 
       ranks_to_search_for.each do |rank|
-        @cards_to_score = player.hand.find_all { |card| card.include?(rank) }
+        @cards_to_score = player.hand.select { |card| card::rank == rank }
         if @cards_to_score.length == 4
-          is_set_of_four = true
-          @last_rank_called = rank
-          break
-        end
-      end
-
-      # score with the matching sets
-      if is_set_of_four
-        @cards_to_score.each do |card_a|
-          player.hand.each do |card_b|
-            player.hand.delete(card_b) if card_b == card_a
+          # score with the matching sets
+      
+          @cards_to_score.each do |card_a|
+            player.hand.each do |card_b|
+              player.hand.delete(card_b) if card_b == card_a
+            end
           end
-        end
 
-        until @cards_to_score.length == 0
-          player.add_to_score_pool(@cards_to_score.delete(@cards_to_score[0]))
-        end
-        
-        # tell the player (or dealer) what they scored with
-        if player == @player
-          @msg_handler.message("score", :rank => @last_rank_called, :context => "You score")
-        else
-          @msg_handler.message("score", :rank => @last_rank_called, :context => "The dealer scores")
+          player.add_to_score_pool(@cards_to_score.delete(@cards_to_score[0])) until @cards_to_score.length == 0
+          
+          # announce what the player (or dealer) scored with
+          if player == @player
+            @msg_handler.message("score", :rank => rank, :context => "You score")
+          else
+            @msg_handler.message("score", :rank => rank, :context => "The dealer scores")
+          end
         end
       end
 
