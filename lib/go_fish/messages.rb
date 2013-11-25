@@ -3,11 +3,8 @@ class GoFishMessages
     puts ""
 
     case req_msg
-    when "tell_hand"
-      puts "Player hand: #{@player.tell_hand}."
-
     when "game_end"
-      puts "The game is over; you have #{p_score} sets, and the dealer has #{d_score} sets."
+      puts "The game is over; you have #{optns[:p_score]} sets, and the dealer has #{optns[:d_score]} sets."
 
       puts ""
       if optns[:p_score] > optns[:d_score]
@@ -55,16 +52,11 @@ class GoFishMessages
       end
 
     when "player_turn"
-      puts "What rank do you want to ask your opponent for? (Type 'hand' to see your hand.)"
+      puts "What card do you want to ask your opponent for? Your hand contains:"
+      puts "#{optns[:player].tell_hand}"
 
     when "first_turn"
       puts "#{optns[:context]} the first turn."
-
-    when "greet"
-      puts "Would you like to play a game of Go Fish?"
-
-    when "farewell"
-      puts "Alrighty then, another time!"
 
     end
       
