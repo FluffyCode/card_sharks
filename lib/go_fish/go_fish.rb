@@ -3,6 +3,7 @@
 # List of thing to do/fix:
   # Refactor
   # Review game notes and make changes as needed
+  # Check to see if player is out of cards (thus automatically passing) before asking what card they want to play (on an empty hand)
 
 
 
@@ -32,22 +33,20 @@ class GoFish
     def find_matching_set(player)
       # look for matching sets
       ranks_to_search_for = []
-      is_set_of_four = 0
-      player.hand.each do |card|
-        ranks_to_search_for << card::rank
-      end
+      is_set_of_four = false
+      player.hand.each { |card| ranks_to_search_for << card::rank }
 
       ranks_to_search_for.each do |rank|
         @cards_to_score = player.hand.find_all { |card| card.include?(rank) }
         if @cards_to_score.length == 4
-          is_set_of_four = 1
+          is_set_of_four = true
           @last_rank_called = rank
           break
         end
       end
 
       # score with the matching sets
-      if is_set_of_four == 1
+      if is_set_of_four
         @cards_to_score.each do |card_a|
           player.hand.each do |card_b|
             player.hand.delete(card_b) if card_b == card_a
