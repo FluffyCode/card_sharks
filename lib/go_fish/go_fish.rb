@@ -4,6 +4,12 @@
   # Refactor
   # Review game notes and make changes as needed
 
+  # Issue:
+    # You won this round!
+    # lib/go_fish/go_fish.rb:28:in `check_for_game_over': undefined local variable or method `play_a_game' for #<GoFish:0x8e53a0> (NameError)
+    # from lib/go_fish/go_fish.rb:70:in `find_matching_set'
+    # from lib/go_fish/go_fish.rb:165:in `go_fish'
+
 
 
 require_relative "../master/deck"
@@ -62,7 +68,7 @@ class GoFish
         if player == @player
           @msg_handler.message("score", :rank => @last_rank_called, :context => "You score")
         else
-          @msg_handler.message("score", :rank => @last_rank_called, :player => "The dealer scores")
+          @msg_handler.message("score", :rank => @last_rank_called, :context => "The dealer scores")
         end
       end
 
