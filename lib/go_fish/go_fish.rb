@@ -2,8 +2,6 @@
 
 # List of thing to do/fix:
   # Refactor
-  # Move messages to their own file; make use of a message handler
-  # Touchup messages with spacing
   # Review game notes and make changes as needed
 
 
@@ -22,17 +20,6 @@ class GoFish
   end
 
   def round_of_go_fish
-    @player.wipe_hand
-    @dealer.wipe_hand
-
-    @deck = Deck.new
-    @deck.shuffle!
-
-    # Initial deal; 7 cards go to each player:
-    7.times { @player.deal(@deck.remove_top_card); @dealer.deal(@deck.remove_top_card) }
-
-    @msg_handler.message("tell_hand")
-
     def check_for_game_over
       player_score = @player.score_pool.length / 4
       dealer_score = @dealer.score_pool.length / 4
@@ -91,13 +78,12 @@ class GoFish
       end
 
       # dealer gets a pool of ranks to chose from:
-      cards_to_chose_from = []
+      choices = []
       # populate the choice-pool:
-      @dealer.hand.each do |card|
-        cards_to_chose_from << card::rank
-      end
+      @dealer.hand.each { |card| choices << card::rank }
+
       # randomly determine which card the dealer will ask for:
-      random_card = cards_to_chose_from[rand(cards_to_chose_from.length)]
+      random_card = choices[rand(choices.length)]
 
       # ask for it:
       @msg_handler.message("dealer_asks", :card => random_card)
@@ -174,9 +160,7 @@ class GoFish
         player.deal(card_to_deal)
         
         # Tell the player what they got (but don't tell the player what the dealer got):
-        if player == @player
-          @msg_handler.message("player_fishes", card_to_deal)
-        end
+        @msg_handler.message("player_fishes", :card => card_to_deal) if player == @player
 
         find_matching_set(player) # find_matching_set here, after being dealt a card from the "pool"
 
@@ -209,28 +193,33 @@ class GoFish
         dealers_turn
       end
 
-      @msg_handler.message("player_turn")
+      @msg_handler.message("player_turn", :player => @player)
       requested_card = gets.chomp
-      if requested_card == "hand"
-        puts
-        puts "Player hand: #{@player.tell_hand}."
-        puts
-        ask_for(0)
-      else
-        player_turn(requested_card)
-      end
+      
+      player_turn(requested_card)
     end
 
     # determine who goes first
     def who_goes_first
       if rand(2) == 1
-        @msg_handler.message("first_turn" :context => "You get")
+        @msg_handler.message("first_turn", :context => "You get")
         ask_for(0)
       else
-        @msg_handler.message("first_turn" :context => "The dealer gets")
+        @msg_handler.message("first_turn", :context => "The dealer gets")
         dealers_turn
       end
     end
+
+    # Clear the players' hands before a new round
+    @player.wipe_hand
+    @dealer.wipe_hand
+
+    # Establish a new deck
+    @deck = Deck.new
+    @deck.shuffle!
+
+    # Initial deal; 7 cards go to each player:
+    7.times { @player.deal(@deck.remove_top_card); @dealer.deal(@deck.remove_top_card) }
 
     # First-time check for any matching sets:
     find_matching_set(@player)
@@ -240,14 +229,4 @@ class GoFish
   end
 end
 
-def play_a_game
-  @msg_handler.message("greet")
-  if gets.chomp.downcase == "yes"
-    GoFish.new.round_of_go_fish
-  else 
-    @msg_handler.message("farewell")
-    exit 0
-  end
-end
-
-play_a_game
+GoFish.new.round_of_go_fish
